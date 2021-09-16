@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -26,6 +27,10 @@ namespace CameronJChurch
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDatabaseDeveloperPageExceptionFilter();
+
+            services.AddDbContext<LogContext>(options =>
+                    options.UseSqlite(
+                        Configuration.GetConnectionString("ApplicationContextConnection")));
 
             services.AddIdentityServer()
                 .AddApiAuthorization<CameronJChurchUser, IdentityContext>();
