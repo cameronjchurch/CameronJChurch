@@ -9,6 +9,7 @@ namespace CameronJChurch.Models
         public int Month { get; set; }
         public int Year { get; set; }
         public double Amount { get; set; }
+        public bool Paid { get; set; }        
         public BillTemplate BillTemplate { get; set; }
     }
 }

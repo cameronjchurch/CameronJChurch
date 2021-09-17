@@ -11,6 +11,5 @@ namespace CameronJChurch.Models
         public double Cost { get; set; }
         public double Amount { get; set; }
         public string UserName { get; set; }
-        public CameronJChurchUser User { get; set; }
     }
 }

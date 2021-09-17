@@ -35,6 +35,7 @@ namespace CameronJChurch.Controllers
             catch (Exception exception) 
             {
                 _logger.LogError(exception, $"Failed reading Logs");
+                throw;
             }
 
             return logEntries;
@@ -53,6 +54,7 @@ namespace CameronJChurch.Controllers
             catch (Exception exception)
             {
                 _logger.LogError(exception, $"Failed reading Logs");
+                throw;
             }
 
             return logEntries;

@@ -11,14 +11,16 @@ export class BillTemplate extends Component {
         this.state = {
             billTemplates: [],
             name: '',
-            day: ''
+            day: '',
+            amount: ''
         }
     }
 
     componentDidMount() { this.getBillTemplates(); }
 
     getBillTemplates = async (e) => {
-        axios.get('api/BillTemplate').then(response => {
+        var user = await authService.getUser();
+        axios.get('api/BillTemplate?userName=' + user.name).then(response => {
             this.setState({ billTemplates: response.data });
         });
     }
@@ -37,7 +39,14 @@ export class BillTemplate extends Component {
         //    headers: { Authorization: `Bearer ${token}` }
         //};
         //{ 'Content-Type': 'multipart/form-data' },
-        axios.post('api/BillTemplate', { name: this.state.name, day: this.state.day, userName: user.name }).then(response => {
+        axios.post('api/BillTemplate',
+            {
+                name: this.state.name,
+                day: this.state.day,
+                amount: this.state.amount,
+                userName: user.name
+            })
+            .then(response => {
             this.getBillTemplates();
         });
     }
@@ -52,20 +61,23 @@ export class BillTemplate extends Component {
 
     handelDayChange = ({ target: { value } }) => { this.setState({ day: value }); }
 
+    handleAmountChange = ({ target: { value } }) => { this.setState({ amount: value }); }
+
     render() {
         const columns =
             [
                 { Header: 'Id', accessor: 'billTemplateId' },
                 { Header: 'Name', accessor: 'name' },
                 { Header: 'Day', accessor: 'day' },
+                { Header: 'Amount', accessor: 'amount' },
                 { Header: 'Creator', accessor: 'userName' },
-                { Header: 'Delete', accessor: 'delete', Cell: ({ cell }) => (<Button onClick={this.deleteTemplate} id={cell.row.values.billTemplateId}>Delete</Button>) }
-            ]
+                { Header: 'Delete', accessor: 'delete', Cell: ({ cell }) => (<Button onClick={this.deleteTemplate} id={cell.row.values.billTemplateId} className="btn btn-danger btn-rounded btn-sm">Delete</Button>) }
+            ];
+
         return (
             <div>
                 <h3>Bill Templates</h3>
                 <CJCTable columns={columns} data={this.state.billTemplates} />
-                {/*<Button onClick={getBillTemplates}>Get Templates</Button>*/}
                 <Card outline color="secondary" style={{ margin: "17px", padding: "17px" }}>
                     <CardTitle tag="h5">New Template</CardTitle>
                     <Form onSubmit={this.newTemplate}>
@@ -74,6 +86,8 @@ export class BillTemplate extends Component {
                             <Input type="text" name="name" id="name" onChange={this.handleNameChange} placeholder="Name" />
                             <Label for="day">Bill Day</Label>
                             <Input type="text" name="day" id="day" onChange={this.handelDayChange} placeholder="Day" />
+                            <Label for="amount">Amount</Label>
+                            <Input type="text" name="amount" id="amount" onChange={this.handleAmountChange} placeholder="Amount" />
                         </FormGroup>
                         <FormGroup>
                             <Button>Save</Button>

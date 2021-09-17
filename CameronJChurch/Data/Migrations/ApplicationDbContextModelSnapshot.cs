@@ -31,6 +31,9 @@ namespace CameronJChurch.Data.Migrations
                     b.Property<int>("Month")
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("Paid")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("Year")
                         .HasColumnType("INTEGER");
 
@@ -47,21 +50,22 @@ namespace CameronJChurch.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("Active")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("Amount")
+                        .HasColumnType("REAL");
+
                     b.Property<int>("Day")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("UserName")
                         .HasColumnType("TEXT");
 
                     b.HasKey("BillTemplateId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("BillTemplates");
                 });
@@ -148,15 +152,10 @@ namespace CameronJChurch.Data.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("REAL");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("UserName")
                         .HasColumnType("TEXT");
 
                     b.HasKey("CoinId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Coins");
                 });
@@ -429,24 +428,6 @@ namespace CameronJChurch.Data.Migrations
                         .HasForeignKey("BillTemplateId");
 
                     b.Navigation("BillTemplate");
-                });
-
-            modelBuilder.Entity("CameronJChurch.Models.BillTemplate", b =>
-                {
-                    b.HasOne("CameronJChurch.Models.CameronJChurchUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("CameronJChurch.Models.Coin", b =>
-                {
-                    b.HasOne("CameronJChurch.Models.CameronJChurchUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

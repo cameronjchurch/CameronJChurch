@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace CameronJChurch.Models
 {
@@ -8,7 +9,9 @@ namespace CameronJChurch.Models
         public int BillTemplateId { get; set; }
         public string Name { get; set; }
         public int Day { get; set; }
+        public double Amount { get; set; }
         public string UserName { get; set; }
-        public CameronJChurchUser User { get; set; }
+        [DefaultValue(true)]
+        public bool Active { get; set; }
     }
 }
