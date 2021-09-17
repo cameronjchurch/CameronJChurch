@@ -3,20 +3,72 @@ using System;
 using CameronJChurch.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace CameronJChurch.Areas.Identity.Data.Migrations
+namespace CameronJChurch.Data.Migrations
 {
-    [DbContext(typeof(IdentityContext))]
-    partial class IdentityContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(ApplicationDbContext))]
+    [Migration("20210916235740_SpellingFix")]
+    partial class SpellingFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "5.0.9");
 
-            modelBuilder.Entity("CameronJChurch.Areas.Identity.Data.CameronJChurchUser", b =>
+            modelBuilder.Entity("CameronJChurch.Models.Bill", b =>
+                {
+                    b.Property<int>("BillId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("Amount")
+                        .HasColumnType("REAL");
+
+                    b.Property<int?>("BillTempalteBillTemplateId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Month")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("BillId");
+
+                    b.HasIndex("BillTempalteBillTemplateId");
+
+                    b.ToTable("Bills");
+                });
+
+            modelBuilder.Entity("CameronJChurch.Models.BillTemplate", b =>
+                {
+                    b.Property<int>("BillTemplateId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Day")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("BillTemplateId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("BillTemplates");
+                });
+
+            modelBuilder.Entity("CameronJChurch.Models.CameronJChurchUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
@@ -78,6 +130,63 @@ namespace CameronJChurch.Areas.Identity.Data.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("CameronJChurch.Models.Coin", b =>
+                {
+                    b.Property<int>("CoinId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("Amount")
+                        .HasColumnType("REAL");
+
+                    b.Property<double>("Cost")
+                        .HasColumnType("REAL");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("REAL");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("CoinId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Coins");
+                });
+
+            modelBuilder.Entity("CameronJChurch.Models.Log", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Exception")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Level")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Properties")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RenderedMessage")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Logs");
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.DeviceFlowCodes", b =>
@@ -315,6 +424,33 @@ namespace CameronJChurch.Areas.Identity.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("CameronJChurch.Models.Bill", b =>
+                {
+                    b.HasOne("CameronJChurch.Models.BillTemplate", "BillTempalte")
+                        .WithMany()
+                        .HasForeignKey("BillTempalteBillTemplateId");
+
+                    b.Navigation("BillTempalte");
+                });
+
+            modelBuilder.Entity("CameronJChurch.Models.BillTemplate", b =>
+                {
+                    b.HasOne("CameronJChurch.Models.CameronJChurchUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("CameronJChurch.Models.Coin", b =>
+                {
+                    b.HasOne("CameronJChurch.Models.CameronJChurchUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -326,7 +462,7 @@ namespace CameronJChurch.Areas.Identity.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("CameronJChurch.Areas.Identity.Data.CameronJChurchUser", null)
+                    b.HasOne("CameronJChurch.Models.CameronJChurchUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -335,7 +471,7 @@ namespace CameronJChurch.Areas.Identity.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("CameronJChurch.Areas.Identity.Data.CameronJChurchUser", null)
+                    b.HasOne("CameronJChurch.Models.CameronJChurchUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -350,7 +486,7 @@ namespace CameronJChurch.Areas.Identity.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CameronJChurch.Areas.Identity.Data.CameronJChurchUser", null)
+                    b.HasOne("CameronJChurch.Models.CameronJChurchUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -359,7 +495,7 @@ namespace CameronJChurch.Areas.Identity.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("CameronJChurch.Areas.Identity.Data.CameronJChurchUser", null)
+                    b.HasOne("CameronJChurch.Models.CameronJChurchUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

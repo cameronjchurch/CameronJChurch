@@ -15,9 +15,9 @@ namespace CameronJChurch.Controllers
     public class LogController : ControllerBase
     {
         private readonly ILogger<LogController> _logger;
-        private readonly LogContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public LogController(ILogger<LogController> logger, LogContext context) 
+        public LogController(ILogger<LogController> logger, ApplicationDbContext context) 
         {
             _logger = logger;
             _context = context;

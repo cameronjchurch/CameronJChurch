@@ -1,4 +1,6 @@
-﻿@inject SignInManager<CameronJChurchUser> SignInManager
+﻿@using CameronJChurch.Models
+
+@inject SignInManager<CameronJChurchUser> SignInManager
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }

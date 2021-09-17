@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace CameronJChurch.Controllers
 {
@@ -26,6 +25,7 @@ namespace CameronJChurch.Controllers
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
+            var user = User.Identity.Name;
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {

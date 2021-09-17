@@ -8,6 +8,7 @@ import AuthorizeRoute from './components/api-authorization/AuthorizeRoute';
 import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
 import { ApplicationPaths } from './components/api-authorization/ApiAuthorizationConstants';
 import AdminHome from './components/admin/AdminHome';
+import FinancesHome from './components/finances/FinancesHome';
 
 import './custom.css'
 
@@ -20,6 +21,7 @@ export default class App extends Component {
                 <Route exact path='/' component={Home} />
                 <Route path='/counter' component={Counter} />
                 <AuthorizeRoute path='/fetch-data' component={FetchData} />
+                <AuthorizeRoute path='/finances' component={FinancesHome} />
                 <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
                 <AuthorizeRoute path='/Admin' component={AdminHome} />
             </Layout>
