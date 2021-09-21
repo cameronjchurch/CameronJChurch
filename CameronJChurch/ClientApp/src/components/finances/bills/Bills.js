@@ -78,6 +78,7 @@ export class Bills extends Component {
                 <h5>TODO</h5>
                 <ul>
                     <li>Current Month</li>
+                    <li>Fix formatting</li>
                     <ul>                        
                         <li>Add bill</li>
                         <li>Admin</li>

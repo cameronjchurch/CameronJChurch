@@ -14,7 +14,7 @@ namespace CameronJChurch.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "5.0.9");
+                .HasAnnotation("ProductVersion", "5.0.10");
 
             modelBuilder.Entity("CameronJChurch.Models.Bill", b =>
                 {
@@ -148,9 +148,6 @@ namespace CameronJChurch.Data.Migrations
 
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
-
-                    b.Property<double>("Price")
-                        .HasColumnType("REAL");
 
                     b.Property<string>("UserName")
                         .HasColumnType("TEXT");
