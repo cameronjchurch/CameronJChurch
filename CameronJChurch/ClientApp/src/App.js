@@ -9,21 +9,48 @@ import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizat
 import { ApplicationPaths } from './components/api-authorization/ApiAuthorizationConstants';
 import AdminHome from './components/admin/AdminHome';
 import FinancesHome from './components/finances/FinancesHome';
+import authService from './components/api-authorization/AuthorizeService'
 
 import './custom.css'
 
 export default class App extends Component {
-    static displayName = App.name;
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            isAuthenticated: false,
+            userName: null
+        };
+    }
+
+    componentDidMount() {
+        this._subscription = authService.subscribe(() => this.populateState());
+        this.populateState();
+    }
+
+    componentWillUnmount() {
+        authService.unsubscribe(this._subscription);
+    }
+
+    async populateState() {
+        const [isAuthenticated, user] = await Promise.all([authService.isAuthenticated(), authService.getUser()])
+        this.setState({
+            isAuthenticated,
+            userName: user && user.name
+        });
+    }
 
     render() {
+        const { isAuthenticated, userName } = this.state;
+
         return (
-            <Layout>
+            <Layout isAuthenticated={isAuthenticated} userName={userName} >
                 <Route exact path='/' component={Home} />
                 <Route path='/counter' component={Counter} />
-                <AuthorizeRoute path='/fetch-data' component={FetchData} />
-                <AuthorizeRoute path='/finances' component={FinancesHome} />
+                <AuthorizeRoute path='/fetch-data' component={FetchData} isAuthenticated={isAuthenticated} userName={userName} />
+                <AuthorizeRoute path='/finances' component={FinancesHome} isAuthenticated={isAuthenticated} userName={userName} />
                 <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
-                <AuthorizeRoute path='/Admin' component={AdminHome} />
+                <AuthorizeRoute path='/Admin' component={AdminHome} isAuthenticated={isAuthenticated} userName={userName} />
             </Layout>
         );
     }

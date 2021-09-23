@@ -140,11 +140,14 @@ namespace CameronJChurch.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<double>("Amount")
-                        .HasColumnType("REAL");
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("TEXT");
 
-                    b.Property<double>("Cost")
-                        .HasColumnType("REAL");
+                    b.Property<decimal>("Cost")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
@@ -155,6 +158,31 @@ namespace CameronJChurch.Data.Migrations
                     b.HasKey("CoinId");
 
                     b.ToTable("Coins");
+                });
+
+            modelBuilder.Entity("CameronJChurch.Models.CoinHistory", b =>
+                {
+                    b.Property<int>("CoinHistoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("CoinId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Cost")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("CoinHistoryId");
+
+                    b.HasIndex("CoinId");
+
+                    b.ToTable("CoinHistory");
                 });
 
             modelBuilder.Entity("CameronJChurch.Models.Log", b =>
@@ -427,6 +455,15 @@ namespace CameronJChurch.Data.Migrations
                     b.Navigation("BillTemplate");
                 });
 
+            modelBuilder.Entity("CameronJChurch.Models.CoinHistory", b =>
+                {
+                    b.HasOne("CameronJChurch.Models.Coin", null)
+                        .WithMany("History")
+                        .HasForeignKey("CoinId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -476,6 +513,11 @@ namespace CameronJChurch.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("CameronJChurch.Models.Coin", b =>
+                {
+                    b.Navigation("History");
                 });
 #pragma warning restore 612, 618
         }

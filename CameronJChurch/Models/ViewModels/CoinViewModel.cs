@@ -1,13 +1,17 @@
-﻿namespace CameronJChurch.Models.ViewModels
+﻿using System;
+using System.Collections.Generic;
+
+namespace CameronJChurch.Models.ViewModels
 {
     public class CoinViewModel
     {
-        public int CoinId { get; set; }
-        public string Name { get; set; }
-        public decimal Cost { get; set; }
-        public decimal Amount{get;set;}
-        public decimal? Price { get; set; }
-        public decimal? Value { get; set; }
-        public string UserName { get; set; }
+        public CoinViewModel() 
+        {
+            Coins = new List<Coin>();
+        }
+        public ICollection<Coin> Coins { get; set; }
+                        
+        public decimal? TotalCost { get; set; }
+        public decimal? TotalValue { get; set; }
     }
 }

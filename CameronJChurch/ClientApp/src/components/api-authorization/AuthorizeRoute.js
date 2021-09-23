@@ -25,6 +25,7 @@ export default class AuthorizeRoute extends Component {
 
     render() {
         const { ready, authenticated } = this.state;
+        const { isAuthenticated, userName } = this.props;
         var link = document.createElement("a");
         link.href = this.props.path;
         const returnUrl = `${link.protocol}//${link.host}${link.pathname}${link.search}${link.hash}`;
@@ -36,7 +37,7 @@ export default class AuthorizeRoute extends Component {
             return <Route {...rest}
                 render={(props) => {
                     if (authenticated) {
-                        return <Component {...props} />
+                        return <Component isAuthenticated={isAuthenticated} userName={userName} {...props} />
                     } else {
                         return <Redirect to={redirectUrl} />
                     }

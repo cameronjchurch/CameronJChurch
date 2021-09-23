@@ -3,10 +3,11 @@ import { TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
 import classnames from 'classnames';
 import { Bills } from './bills/Bills';
 import { BillTemplate } from './bills/BillTemplate';
-import { Crypto } from './Crypto';
+import { Crypto } from './crypto/Crypto';
+import { User } from 'oidc-client';
 
 const FinancesHome = (props) => {
-
+    const { isAuthenticated, userName } = props;
     const [activeTab, setActiveTab] = useState('1');
 
     const toggle = tab => {
@@ -26,18 +27,18 @@ const FinancesHome = (props) => {
                 </NavItem>
                 <NavItem>
                     <NavLink className={classnames({ active: activeTab === '3' })} onClick={() => { toggle('3'); }} style={{ color: "Gray" }}>Bill Templates</NavLink>
-                </NavItem>                
+                </NavItem>
             </Nav>
             <TabContent activeTab={activeTab}>
                 <TabPane tabId='1'>
-                    <Crypto />
+                    <Crypto userName={userName} />
                 </TabPane>
                 <TabPane tabId='2'>
-                    <Bills />
+                    <Bills userName={userName} />
                 </TabPane>
                 <TabPane tabId='3'>
-                    <BillTemplate />
-                </TabPane>                
+                    <BillTemplate userName={userName} />
+                </TabPane>
             </TabContent>
         </div>
     );

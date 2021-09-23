@@ -6,7 +6,13 @@ export class Home extends Component {
   render () {
     return (
       <div>
-        <h1>Hello, world!</h1>
+            <h1>Hello, world!</h1>
+            <hr />
+            <h5>TODO</h5>
+            <ul>
+                <li>Fix AuthorizeRouts to remove redundant auth service call</li>
+                <li>Update homepage</li>
+            </ul>
         <p>Welcome to your new single-page application, built with:</p>
         <ul>
           <li><a href='https://get.asp.net/'>ASP.NET Core</a> and <a href='https://msdn.microsoft.com/en-us/library/67ef8sbd.aspx'>C#</a> for cross-platform server-side code</li>

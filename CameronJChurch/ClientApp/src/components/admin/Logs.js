@@ -1,6 +1,6 @@
 ﻿import React, { useState } from 'react';
 import { Button } from 'reactstrap';
-import CJCTable from '../common/CJCTable';
+import AppTable from '../common/AppTable';
 import { ApiPaths } from '../common/ApiPahts';
 const axios = require('axios').default;
 
@@ -46,7 +46,7 @@ const Logs = (props) => {
     return (
         <div>
             <h3>Logs</h3>
-            <CJCTable columns={columns} data={logMessages} />
+            <AppTable columns={columns} data={logMessages} />
             <ActionButtons />
         </div>
     );

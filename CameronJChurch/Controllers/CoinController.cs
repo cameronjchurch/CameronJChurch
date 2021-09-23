@@ -4,7 +4,6 @@ using CameronJChurch.Models.ViewModels;
 using CoinGecko.Clients;
 using CoinGecko.Entities.Response.Coins;
 using CoinGecko.Parameters;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -31,13 +30,13 @@ namespace CameronJChurch.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<CoinViewModel>> Get(string userName)
+        public async Task<CoinViewModel> Get(string userName)
         {
-            List<CoinViewModel> results = new();
+            CoinViewModel results = new();
 
             try
             {
-                var coins = await _context.Coins.Where(c => c.UserName == userName).ToListAsync();
+                var coins = await _context.Coins.Include(c => c.History).Where(c => c.UserName == userName).ToListAsync();
                 var markets = await _coinGeckoClient.CoinsClient.GetCoinMarkets("usd", coins.Select(c => c.Name).ToArray(),
                   OrderField.MarketCapDesc, 1, 1, false, "1h", null);
 
@@ -53,19 +52,21 @@ namespace CameronJChurch.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(IEnumerable<Coin> coins)
+        public async Task<IActionResult> Post(CoinViewModel coinsViewModel)
         {
             try
             {
-                foreach (var c in coins)
-                {
+                foreach (var c in coinsViewModel.Coins)
+                {                    
                     if (c.CoinId == 0)
                     {
+                        c.CreatedDate = DateTime.UtcNow;
                         await _context.Coins.AddAsync(c);
                     }
                     else
                     {
-                        _context.Coins.Update(c);
+                        if(c.Updated)
+                            _context.Coins.Update(c);
                     }
                 }
                 await _context.SaveChangesAsync();
@@ -79,29 +80,25 @@ namespace CameronJChurch.Controllers
             return Ok();
         }
 
-        private static List<CoinViewModel> GetConViewModel(List<CoinMarkets> markets, List<Coin> coins)
+        private static CoinViewModel GetConViewModel(IEnumerable<CoinMarkets> markets, IEnumerable<Coin> coins)
         {
-            List<CoinViewModel> results = new();
+            CoinViewModel result = new();
 
             foreach (var market in markets)
             {
-                var coin = coins.First(c => c.Name == market.Id);
-                var coinViewModel = new CoinViewModel
-                {
-                    Name = coin.Name,
-                    CoinId = coin.CoinId,
-                    Amount = coin.Amount,
-                    Cost = coin.Cost,
-                    UserName = coin.UserName,
-                    Price = market.CurrentPrice
-                };
+                var coin = coins.First(c => c.Name.ToLower() == market.Id);
 
-                coinViewModel.Value = coinViewModel.Amount * coinViewModel.Price;
-                
-                results.Add(coinViewModel); 
+                coin.Price = market.CurrentPrice;
+                coin.Symbol = market.Symbol;
+                coin.Value = coin.Amount * coin.Price;
+
+                result.Coins.Add(coin);
             }
 
-            return results;
+            result.TotalCost = result.Coins.Sum(c => c.Cost);
+            result.TotalValue = result.Coins.Sum(c => c.Value);
+
+            return result;
         }
     }
 }

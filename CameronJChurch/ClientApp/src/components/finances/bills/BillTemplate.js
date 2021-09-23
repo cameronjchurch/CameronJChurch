@@ -1,6 +1,6 @@
 ﻿import React, { Component } from 'react';
 import { Button, Form, FormGroup, Label, Input, Card, CardTitle } from 'reactstrap';
-import CJCTable from '../../common/CJCTable';
+import AppTable from '../../common/AppTable';
 import authService from '../../api-authorization/AuthorizeService'
 const axios = require('axios').default;
 
@@ -19,32 +19,19 @@ export class BillTemplate extends Component {
     componentDidMount() { this.getBillTemplates(); }
 
     getBillTemplates = async (e) => {
-        var user = await authService.getUser();
-        axios.get('api/BillTemplate?userName=' + user.name).then(response => {
+        axios.get('api/BillTemplate?userName=' + this.props.userName).then(response => {
             this.setState({ billTemplates: response.data });
         });
     }
 
     newTemplate = async (e) => {
         e.preventDefault();
-
-        //let formData = new FormData();
-        //formData.append('name', name);
-        //formData.append('day', day);
-
-        //const token = await authService.getAccessToken();
-        var user = await authService.getUser();
-
-        //const config = {
-        //    headers: { Authorization: `Bearer ${token}` }
-        //};
-        //{ 'Content-Type': 'multipart/form-data' },
         axios.post('api/BillTemplate',
             {
                 name: this.state.name,
                 day: this.state.day,
                 amount: this.state.amount,
-                userName: user.name
+                userName: this.props.userName
             })
             .then(response => {
             this.getBillTemplates();
@@ -53,7 +40,6 @@ export class BillTemplate extends Component {
 
     deleteTemplate = async (e) => {
         e.preventDefault();
-
         axios.delete('api/BillTemplate/' + e.target.id).then(response => { this.getBillTemplates(); });
     }
 
@@ -77,7 +63,7 @@ export class BillTemplate extends Component {
         return (
             <div>
                 <h3>Bill Templates</h3>
-                <CJCTable columns={columns} data={this.state.billTemplates} />
+                <AppTable columns={columns} data={this.state.billTemplates} />
                 <Card outline color="secondary" style={{ margin: "17px", padding: "17px" }}>
                     <CardTitle tag="h5">New Template</CardTitle>
                     <Form onSubmit={this.newTemplate}>

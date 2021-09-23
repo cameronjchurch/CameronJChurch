@@ -1,7 +1,6 @@
 ﻿import React, { Component } from 'react';
 import { Button, Form, FormGroup, Label, Input, Card, CardTitle } from 'reactstrap';
-import CJCTable from '../../common/CJCTable';
-import authService from '../../api-authorization/AuthorizeService'
+import AppTableWithFooter from '../../common/AppTableWithFooter';
 const axios = require('axios').default;
 
 export class Bills extends Component {
@@ -24,8 +23,7 @@ export class Bills extends Component {
     }
 
     getBills = async (e) => {
-        var user = await authService.getUser();
-        axios.get('api/Bill?userName=' + user.name).then(response => {
+        axios.get('api/Bill?userName=' + this.props.userName).then(response => {
             this.setState({ bills: response.data });
         });
     }
@@ -44,7 +42,7 @@ export class Bills extends Component {
 
     renderAmountCell = (cell) => {
         return (
-            <Input type="text" onChange={(e) => this.handelAmountChange(e, cell.row.values.billId)} value={cell.row.values.amount} />
+            <Input type="text" onChange={(e) => this.handelAmountChange(e, cell.row.values.billId)} value={cell.row.values.amount} className={"w-75"} size="sm" />
         );
     }
 
@@ -54,39 +52,41 @@ export class Bills extends Component {
         );
     }
 
+    renderAmountFooter = (props) => {
+        return (
+            <span>Total Amount: 0</span>
+            );
+    }
+
     render() {
 
         const columns = [
             { Header: 'Id', accessor: 'billId' },
             { Header: 'Name', accessor: 'name' },
-            {
-                Header: 'Amount', accessor: 'amount', Cell: this.renderAmountCell
-            },
+            { Header: 'Amount', accessor: 'amount', Cell: this.renderAmountCell, Footer: this.renderAmountFooter },
             { Header: 'Date', accessor: 'date' },
-            {
-                Header: 'Paid', accessor: 'paid', Cell: this.renderPaidCell
-            },
+            { Header: 'Paid', accessor: 'paid', Cell: this.renderPaidCell },
             { Header: 'Creator', accessor: 'userName' }
         ];
 
         return (
             <div>
                 <h3>Bills</h3>
-                <CJCTable columns={columns} data={this.state.bills} />
-                <Button onClick={this.saveChanges}>Save</Button>
                 <hr />
                 <h5>TODO</h5>
                 <ul>
                     <li>Current Month</li>
                     <li>Fix formatting</li>
-                    <ul>                        
+                    <ul>
                         <li>Add bill</li>
                         <li>Admin</li>
+                        <li>Date Formatting</li>
                     </ul>
                     <li>History</li>
                 </ul>
                 <hr />
-
+                <AppTableWithFooter columns={columns} data={this.state.bills} />
+                <Button onClick={this.saveChanges}>Save</Button>
             </div>
         );
     }

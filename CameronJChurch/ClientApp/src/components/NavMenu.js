@@ -5,8 +5,6 @@ import { LoginMenu } from './api-authorization/LoginMenu';
 import './NavMenu.css';
 
 export class NavMenu extends Component {
-    static displayName = NavMenu.name;
-
     constructor(props) {
         super(props);
 
@@ -23,6 +21,8 @@ export class NavMenu extends Component {
     }
 
     render() {
+        const { isAuthenticated, userName } = this.props;
+
         return (
             <header>
                 <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3" light>
@@ -37,13 +37,15 @@ export class NavMenu extends Component {
                                 <NavItem>
                                     <NavLink tag={Link} className="text-dark" to="/counter">Counter</NavLink>
                                 </NavItem>
-                                <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/fetch-data">Fetch data</NavLink>
-                                </NavItem>
-                                <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/finances">Finances</NavLink>
-                                </NavItem>
-                                <LoginMenu>
+                                {isAuthenticated &&
+                                    <NavItem>
+                                        <NavLink tag={Link} className="text-dark" to="/fetch-data">Fetch data</NavLink>
+                                    </NavItem>}
+                                {isAuthenticated &&
+                                    < NavItem >
+                                        <NavLink tag={Link} className="text-dark" to="/finances">Finances</NavLink>
+                                    </NavItem>}
+                                <LoginMenu isAuthenticated={isAuthenticated} userName={userName} >
                                 </LoginMenu>
                             </ul>
                         </Collapse>
