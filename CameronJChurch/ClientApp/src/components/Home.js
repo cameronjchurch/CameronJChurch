@@ -6,8 +6,6 @@ export class Home extends Component {
     render() {
         return (
             <div>
-                <h1>Hello, world!</h1>
-                <hr />
                 <h5>TODO</h5>
                 <ul>
                     <li>Fix AuthorizeRouts to remove redundant auth service call</li>
@@ -20,6 +18,7 @@ export class Home extends Component {
                     <li>Demo</li>
                     <li>Arch diagrams</li>
                     <li>n-tier</li>
+                    <li>Fix resume download</li>
                 </ul>
                 <hr />
                 <div id="contact">
