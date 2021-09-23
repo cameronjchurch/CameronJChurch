@@ -5,6 +5,12 @@
       "connectionId": "ConnectionStrings:IdentityContextConnection",
       "suggestion": "true",
       "ignored": "true"
+    },
+    "mssql2": {
+      "type": "mssql",
+      "connectionId": "ConnectionStrings:ApplicationContextConnection",
+      "suggestion": "true",
+      "ignored": "true"
     }
   }
 }

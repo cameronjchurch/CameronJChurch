@@ -42,7 +42,7 @@ export class Bills extends Component {
 
     renderAmountCell = (cell) => {
         return (
-            <Input type="text" onChange={(e) => this.handelAmountChange(e, cell.row.values.billId)} value={cell.row.values.amount} className={"w-75"} size="sm" />
+            <Input type="text" onChange={(e) => this.handelAmountChange(e, cell.row.values.billId)} value={cell.row.values.amount} className={"w-75"} bsSize="sm" />
         );
     }
 

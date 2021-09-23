@@ -185,6 +185,23 @@ namespace CameronJChurch.Data.Migrations
                     b.ToTable("CoinHistory");
                 });
 
+            modelBuilder.Entity("CameronJChurch.Models.CoinTemplate", b =>
+                {
+                    b.Property<int>("CoinTemplateId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Symbol")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("CoinTemplateId");
+
+                    b.ToTable("CoinTemplates");
+                });
+
             modelBuilder.Entity("CameronJChurch.Models.Log", b =>
                 {
                     b.Property<long>("Id")

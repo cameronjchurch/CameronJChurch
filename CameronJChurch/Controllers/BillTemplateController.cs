@@ -24,13 +24,13 @@ namespace CameronJChurch.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<BillTemplate>> Get(string userName)
+        public async Task<IEnumerable<BillTemplate>> Get()
         {
             IEnumerable<BillTemplate> results = null;
 
             try 
             {
-                results = await _context.BillTemplates.Where(b => b.Active && b.UserName == userName).ToListAsync();
+                results = await _context.BillTemplates.Where(b => b.Active).ToListAsync();
             }
             catch (Exception exception)
             {

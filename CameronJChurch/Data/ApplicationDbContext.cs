@@ -18,5 +18,6 @@ namespace CameronJChurch.Data
         public virtual DbSet<Bill> Bills { get; set; }
         public virtual DbSet<BillTemplate> BillTemplates { get; set; }
         public virtual DbSet<Coin> Coins { get; set; }
+        public virtual DbSet<CoinTemplate> CoinTemplates { get; set; }
     }
 }
