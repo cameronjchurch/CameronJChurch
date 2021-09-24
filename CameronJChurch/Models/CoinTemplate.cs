@@ -9,6 +9,7 @@ namespace CameronJChurch.Models
         public int CoinTemplateId { get; set; }
         public string Name { get; set; }
         public string Symbol { get; set; }
+        public bool Active { get; set; }
         [NotMapped]
         public bool Updated { get; set; }
     }

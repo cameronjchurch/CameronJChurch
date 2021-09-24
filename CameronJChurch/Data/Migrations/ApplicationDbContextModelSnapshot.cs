@@ -28,6 +28,9 @@ namespace CameronJChurch.Data.Migrations
                     b.Property<int?>("BillTemplateId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("Month")
                         .HasColumnType("INTEGER");
 
@@ -143,19 +146,21 @@ namespace CameronJChurch.Data.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("CoinTemplateId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<decimal>("Cost")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("UserName")
                         .HasColumnType("TEXT");
 
                     b.HasKey("CoinId");
+
+                    b.HasIndex("CoinTemplateId");
 
                     b.ToTable("Coins");
                 });
@@ -189,6 +194,9 @@ namespace CameronJChurch.Data.Migrations
                 {
                     b.Property<int>("CoinTemplateId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Active")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
@@ -470,6 +478,15 @@ namespace CameronJChurch.Data.Migrations
                         .HasForeignKey("BillTemplateId");
 
                     b.Navigation("BillTemplate");
+                });
+
+            modelBuilder.Entity("CameronJChurch.Models.Coin", b =>
+                {
+                    b.HasOne("CameronJChurch.Models.CoinTemplate", "CoinTemplate")
+                        .WithMany()
+                        .HasForeignKey("CoinTemplateId");
+
+                    b.Navigation("CoinTemplate");
                 });
 
             modelBuilder.Entity("CameronJChurch.Models.CoinHistory", b =>

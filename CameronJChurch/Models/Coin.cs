@@ -13,16 +13,15 @@ namespace CameronJChurch.Models
         }
 
         [Key]
-        public int CoinId { get; set; }
-        public string Name { get; set; }
+        public int CoinId { get; set; }        
         public decimal Cost { get; set; }
         public decimal Amount { get; set; }        
         public string UserName { get; set; }
         public DateTime CreatedDate { get; set; }
+        public int CoinTemplateId { get; set; }
+        public CoinTemplate CoinTemplate { get; set; }
         public ICollection<CoinHistory> History { get; set; }
 
-        [NotMapped]
-        public string Symbol { get; set; }
         [NotMapped]
         public decimal? Price { get; set; }
         [NotMapped]

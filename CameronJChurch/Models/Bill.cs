@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace CameronJChurch.Models
 {
@@ -9,7 +10,8 @@ namespace CameronJChurch.Models
         public int Month { get; set; }
         public int Year { get; set; }
         public double Amount { get; set; }
-        public bool Paid { get; set; }        
+        public bool Paid { get; set; }
+        public DateTime CreatedDate { get; set; }
         public BillTemplate BillTemplate { get; set; }
     }
 }

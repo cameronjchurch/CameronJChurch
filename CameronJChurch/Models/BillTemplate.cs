@@ -10,8 +10,7 @@ namespace CameronJChurch.Models
         public string Name { get; set; }
         public int Day { get; set; }
         public double Amount { get; set; }
-        public string UserName { get; set; }
-        [DefaultValue(true)]
+        public string UserName { get; set; }        
         public bool Active { get; set; }
     }
 }

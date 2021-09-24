@@ -41,6 +41,8 @@ namespace CameronJChurch.Controllers
         {
             try 
             {
+                coinTemplate.Active = true;
+                
                 if (coinTemplate.CoinTemplateId == 0)
                 {
                     await _context.CoinTemplates.AddAsync(coinTemplate);

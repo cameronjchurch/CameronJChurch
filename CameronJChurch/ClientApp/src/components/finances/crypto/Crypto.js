@@ -13,14 +13,13 @@ export class Crypto extends Component {
             fetchingData: true,
             coinViewModel: {
                 coins: [],
-                coinNames: [],
+                coinTemplates: [],
                 totalCost: 0,
                 totalValue: 0
-            },
-            newCoinName: '',
+            },            
             newCoinCost: '',
             newCoinAmount: '',
-            selectedCoinName: ''
+            selectedCoinTemplate: null
         }
 
         this.handleCostChange = this.handleCostChange.bind(this);
@@ -32,19 +31,21 @@ export class Crypto extends Component {
 
     newCoin = async (e) => {
         e.preventDefault();
-        const coin = {
-            name: this.state.newCoinName,
+        var coinTemplateId = this.state.selectedCoinTemplate.value;
+        var coinTemplate = this.state.coinViewModel.coinTemplates.find(ct => ct.coinTemplateId === coinTemplateId);
+        const coin = {            
             cost: this.state.newCoinCost,
             amount: this.state.newCoinAmount,
-            userName: this.props.userName
+            userName: this.props.userName,
+            coinTemplateId: coinTemplateId,
+            coinTemplate: coinTemplate
         }
 
         axios.post('api/Coin', coin).then(response => {
-            this.setState({
-                newCoinName: '',
+            this.setState({                
                 newCoinCost: '',
                 newCoinAmount: '',
-                selectedCoinName: ''
+                selectedCoinTemplate: null
             });
             this.getCoins();
         });
@@ -60,8 +61,8 @@ export class Crypto extends Component {
     handleNewCoinCostChange = ({ target: { value } }) => { this.setState({ newCoinCost: value }); }
     handleNewCoinAmountChange = ({ target: { value } }) => { this.setState({ newCoinAmount: value }); }
 
-    handleSelectedNameChange = (selectedName) => {
-        this.setState({ selectedCoinName: selectedName, newCoinName: selectedName.value });
+    handleSelectedNameChange = (selectedTemplate) => {
+        this.setState({ selectedCoinTemplate: selectedTemplate });
     }
 
     handleCostChange(e, coinId) {
@@ -91,7 +92,7 @@ export class Crypto extends Component {
     renderCostCell = (props) => {
         const data = props.cell.row.original;
         return (
-            <InputGroup className={"w-50"} size="sm">
+            <InputGroup size="sm">
                 <InputGroupAddon addonType="prepend">$</InputGroupAddon>
                 <Input type="text" key={data.coinId} onChange={(e) => this.handleCostChange(e, data.coinId)} value={data.cost} onBlur={(e) => this.handleBlur(e, data.coinId)} />
             </InputGroup>
@@ -101,14 +102,14 @@ export class Crypto extends Component {
     renderAmountCell = (props) => {
         const data = props.cell.row.original;
         return (
-            <Input type="text" key={data.coinId} onChange={(e) => this.handleAmountChange(e, data.coinId)} value={data.amount} onBlur={(e) => this.handleBlur(e, data.coinId)} className={"w-75"} bsSize="sm" />
+            <Input type="text" key={data.coinId} onChange={(e) => this.handleAmountChange(e, data.coinId)} value={data.amount} onBlur={(e) => this.handleBlur(e, data.coinId)} bsSize="sm" />
         );
     }
 
     renderNameCell = (props) => {
         const data = props.cell.row.original;
         return (
-            <span>{data.name} ({data.symbol})</span>
+            <span>{data.coinTemplate.name} ({data.coinTemplate.symbol})</span>
         );
     }
 
@@ -139,7 +140,7 @@ export class Crypto extends Component {
     }
 
     render() {
-        const coinNames = this.state.coinViewModel.coinNames.map(name => ({ value: name, label: name }));
+        const coinNames = this.state.coinViewModel.coinTemplates.map(coinTemplate => ({ value: coinTemplate.coinTemplateId, label: coinTemplate.name + ' (' + coinTemplate.symbol + ')' }));
         const columns =
             [
                 { Header: 'Name', accessor: 'name', Cell: this.renderNameCell },
@@ -158,7 +159,7 @@ export class Crypto extends Component {
                     <li>Simplify Crypto.js (decompose and cleanup)</li>
                     <li>Graphs react-charts</li>
                     <li>Totals history</li>                    
-                    <li>History update trigger</li>
+                    <li>History update trigger</li>                    
                 </ul>
                 <hr />
                 {this.state.fetchingData ? <div className="center"><Spinner /></div> : <AppTableWithFooter columns={columns} data={this.state.coinViewModel.coins} />}
@@ -168,9 +169,8 @@ export class Crypto extends Component {
                     {this.state.fetchingData ? <div className="center"><Spinner /></div> :
                         <Form onSubmit={this.newCoin}>
                             <FormGroup>
-                                <Label for="name">Name</Label>
-                                {/*<Input type="text" name="name" id="name" onChange={this.handleNewCoinNameChange} placeholder="Name" />*/}
-                                <Select options={coinNames} onChange={this.handleSelectedNameChange} value={this.state.selectedCoinName} />
+                                <Label for="name">Name</Label>                                
+                                <Select options={coinNames} onChange={this.handleSelectedNameChange} value={this.state.selectedCoinTemplate} />
                                 <Label for="day">Cost</Label>
                                 <Input type="text" name="cost" id="cost" onChange={this.handleNewCoinCostChange} placeholder="Cost" value={this.state.newCoinCost} />
                                 <Label for="amount">Amount</Label>

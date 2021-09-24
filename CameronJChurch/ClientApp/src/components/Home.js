@@ -17,8 +17,7 @@ export class Home extends Component {
                     <li>Demo</li>
                     <li>Arch diagrams</li>
                     <li>n-tier</li>
-                    <li>Fix resume download</li>
-                    <li>favicon</li>
+                    <li>Fix resume download</li>                    
                 </ul>
                 <hr />
                 <div id="contact">
