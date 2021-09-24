@@ -21,7 +21,7 @@ export class NavMenu extends Component {
     }
 
     render() {
-        const { isAuthenticated, userName } = this.props;
+        const { authenticated, userName } = this.props;
 
         return (
             <header>
@@ -33,12 +33,16 @@ export class NavMenu extends Component {
                             <ul className="navbar-nav flex-grow">
                                 <NavItem>
                                     <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
-                                </NavItem>                                
-                                {isAuthenticated &&
+                                </NavItem>
+                                {authenticated &&
                                     < NavItem >
                                         <NavLink tag={Link} className="text-dark" to="/finances">Finances</NavLink>
                                     </NavItem>}
-                                <LoginMenu isAuthenticated={isAuthenticated} userName={userName} >
+                                {authenticated &&
+                                    <NavItem>
+                                        <NavLink tag={Link} className="text-dark" to='/Admin'>Admin</NavLink>
+                                    </NavItem>}
+                                <LoginMenu authenticated={authenticated} userName={userName} >
                                 </LoginMenu>
                             </ul>
                         </Collapse>

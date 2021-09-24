@@ -8,7 +8,6 @@ export class Home extends Component {
             <div>
                 <h5>TODO</h5>
                 <ul>
-                    <li>Fix AuthorizeRouts to remove redundant auth service call</li>
                     <li>API Route Constants</li>
                     <li>Update homepage</li>
                     <li>Fix mobile formatting</li>
@@ -19,18 +18,19 @@ export class Home extends Component {
                     <li>Arch diagrams</li>
                     <li>n-tier</li>
                     <li>Fix resume download</li>
+                    <li>favicon</li>
                 </ul>
                 <hr />
                 <div id="contact">
-                    <section class="center">
-                        <a href="http://linkedin.com/in/cameronjchurch" target="_blank">LinkedIn</a> | <a href="mailto:cameron.j.church@gmail.com">Email</a>
+                    <section className="center">
+                        <a href="http://linkedin.com/in/cameronjchurch" target="_blank" rel="noopener noreferrer">LinkedIn</a> | <a href="mailto:cameron.j.church@gmail.com" rel="noopener noreferrer">Email</a>
                     </section>
                 </div>
                 <div>
                     <h3>Summary</h3>
                     <div>
                         <section>
-                            <div class="center">Highly analytical problem solver with object-oriented design and implementation experience.</div>
+                            <div className="center">Highly analytical problem solver with object-oriented design and implementation experience.</div>
                             <ul>
                                 <li><strong>Distributed system design: </strong>over ten years experience interacting, analyzing and developing distributed systems for line of business applications.</li>
                                 <li><strong>Cutting edge development methodologies: </strong>continuously honing skill set to keep pace with updates to development tools and emerging technologies. </li>
@@ -49,7 +49,7 @@ export class Home extends Component {
                         <section>
                             <strong>Software Development Manager</strong>
                             <p>
-                                <a href="http://www.bkfs.com/Pages/default.aspx" target="_blank">Black Knight Financial Services</a> (BKFS) April 2015 – Present | Jacksonville, FL
+                                <a href="http://www.bkfs.com/Pages/default.aspx" target="_blank" rel="noopener noreferrer">Black Knight Financial Services</a> (BKFS) April 2015 – Present | Jacksonville, FL
                                 Development lead ensuring code and design integrity, product stability, and deliverability of enhancements.
                             </p>
                             <ul>
@@ -59,7 +59,7 @@ export class Home extends Component {
                             </ul>
                             <strong>Applications Programmer III</strong>
                             <p>
-                                <a href="http://www.bkfs.com/Pages/default.aspx" target="_blank">Black Knight Financial Services</a> (BKFS) April 2015 – Present | Jacksonville, FL
+                                <a href="http://www.bkfs.com/Pages/default.aspx" target="_blank" rel="noopener noreferrer">Black Knight Financial Services</a> (BKFS) April 2015 – Present | Jacksonville, FL
                                 Development lead ensuring code and design integrity, product stability, and deliverability of enhancements.
                             </p>
                             <ul>
@@ -69,7 +69,7 @@ export class Home extends Component {
                             </ul>
                             <strong>Applications Programmer II</strong>
                             <p>
-                                <a href="http://www.bkfs.com/Pages/default.aspx" target="_blank">Black Knight Financial Services</a> (formerly LPS) April 2013 – April 2015 | Jacksonville, FL
+                                <a href="http://www.bkfs.com/Pages/default.aspx" target="_blank" rel="noopener noreferrer">Black Knight Financial Services</a> (formerly LPS) April 2013 – April 2015 | Jacksonville, FL
                                 Implementation of new product features, timely defect remediation, and peer review of code.
                             </p>
                             <ul>
@@ -83,7 +83,7 @@ export class Home extends Component {
                             </ul>
                             <strong>Applications Development Analyst II</strong>
                             <p>
-                                <a href="http://www.lpsvcs.com/Pages/default.aspx" target="_blank">Lender Processing Services, Inc.</a> (LPS) March 2012 – April 2013 | Jacksonville, FL
+                                <a href="http://www.lpsvcs.com/Pages/default.aspx" target="_blank" rel="noopener noreferrer">Lender Processing Services, Inc.</a> (LPS) March 2012 – April 2013 | Jacksonville, FL
                                 Responsible for organization, management, and timely delivery of project commitments. Performance analysis of distributed computer systems. Implementation of automation tools to increase productivity.
                             </p>
                             <ul>
@@ -102,7 +102,7 @@ export class Home extends Component {
                             </ul>
                             <strong>Applications Development Analyst</strong>
                             <p>
-                                <a href="http://www.lpsvcs.com/Pages/default.aspx" target="_blank">Lender Processing Services, Inc.</a> (LPS) November 2009 – March 2012 | Jacksonville, FL
+                                <a href="http://www.lpsvcs.com/Pages/default.aspx" target="_blank" rel="noopener noreferrer">Lender Processing Services, Inc.</a> (LPS) November 2009 – March 2012 | Jacksonville, FL
                                 Performance analysis of distributed computer systems. Implementation of automation tools to increase productivity.
                             </p>
                             <ul>
@@ -117,12 +117,12 @@ export class Home extends Component {
                     <div>
                         <section>
                             <div><strong>University of Florida, </strong>Gainesville, FL</div>
-                            <div class="float-left">Bachelor of Science, Computer Science Engineering</div><div class="float-right">Dean's List, College of Engineering 2009</div>
-                            <div class="cear-fix">Minor in Communications Studies</div>
+                            <div className="float-left">Bachelor of Science, Computer Science Engineering</div><div className="float-right">Dean's List, College of Engineering 2009</div>
+                            <div className="cear-fix">Minor in Communications Studies</div>
                         </section>
                     </div>
                 </div>
-                <div id="resumePrint" class="center"><p><a href="~/Documents/CameronJChurchResume.pdf">Download my resume</a></p></div>
+                <div id="resumePrint" className="center"><p><a href="~/Documents/CameronJChurchResume.pdf">Download my resume</a></p></div>
             </div>
         );
     }

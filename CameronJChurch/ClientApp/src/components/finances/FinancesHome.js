@@ -5,7 +5,7 @@ import { Bills } from './bills/Bills';
 import { Crypto } from './crypto/Crypto';
 
 const FinancesHome = (props) => {
-    const { isAuthenticated, userName } = props;
+    const { userName } = props;
     const [activeTab, setActiveTab] = useState('1');
 
     const toggle = tab => {

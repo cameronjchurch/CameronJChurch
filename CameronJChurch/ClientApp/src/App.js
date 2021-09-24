@@ -16,13 +16,14 @@ export default class App extends Component {
         super(props);
 
         this.state = {
+            ready: false,
             isAuthenticated: false,
             userName: null
         };
     }
 
     componentDidMount() {
-        this._subscription = authService.subscribe(() => this.populateState());
+        this._subscription = authService.subscribe(() => this.authenticationChanged());
         this.populateState();
     }
 
@@ -31,22 +32,28 @@ export default class App extends Component {
     }
 
     async populateState() {
-        const [isAuthenticated, user] = await Promise.all([authService.isAuthenticated(), authService.getUser()])
+        const [authenticated, user] = await Promise.all([authService.isAuthenticated(), authService.getUser()])
         this.setState({
-            isAuthenticated,
+            ready: true,
+            authenticated,
             userName: user && user.name
         });
     }
 
+    async authenticationChanged() {
+        this.setState({ ready: false, authenticated: false });
+        await this.populateAuthenticationState();
+    }
+
     render() {
-        const { isAuthenticated, userName } = this.state;
+        const { ready, authenticated, userName } = this.state;
 
         return (
-            <Layout isAuthenticated={isAuthenticated} userName={userName} >
+            <Layout authenticated={authenticated} userName={userName} >
                 <Route exact path='/' component={Home} />
-                <AuthorizeRoute path='/finances' component={FinancesHome} isAuthenticated={isAuthenticated} userName={userName} />
+                <AuthorizeRoute path='/finances' component={FinancesHome} ready={ready} authenticated={authenticated} userName={userName} />
                 <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
-                <AuthorizeRoute path='/Admin' component={AdminHome} isAuthenticated={isAuthenticated} userName={userName} />
+                <AuthorizeRoute path='/Admin' component={AdminHome} ready={ready} authenticated={authenticated} userName={userName} />
             </Layout>
         );
     }

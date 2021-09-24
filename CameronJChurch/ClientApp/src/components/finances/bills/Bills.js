@@ -1,5 +1,5 @@
 ﻿import React, { Component } from 'react';
-import { Button, Form, FormGroup, Label, Input, Card, CardTitle } from 'reactstrap';
+import { Button, Input } from 'reactstrap';
 import AppTableWithFooter from '../../common/AppTableWithFooter';
 const axios = require('axios').default;
 

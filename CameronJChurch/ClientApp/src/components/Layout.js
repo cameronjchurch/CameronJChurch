@@ -5,11 +5,11 @@ import { NavMenu } from './NavMenu';
 export class Layout extends Component {
 
     render() {
-        const { isAuthenticated, userName } = this.props;
+        const { authenticated, userName } = this.props;
 
         return (
             <div>
-                <NavMenu isAuthenticated={isAuthenticated} userName={userName} />
+                <NavMenu authenticated={authenticated} userName={userName} />
                 <Container>
                     {this.props.children}
                 </Container>
