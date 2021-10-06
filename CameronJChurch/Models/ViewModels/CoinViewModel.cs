@@ -8,9 +8,11 @@ namespace CameronJChurch.Models.ViewModels
         {
             Coins = new List<Coin>();
             CoinTemplates = new List<CoinTemplate>();
+            CoinTotalHistory = new List<CoinTotal>();
         }
         public ICollection<Coin> Coins { get; set; }
         public IEnumerable<CoinTemplate> CoinTemplates { get; set; }
+        public ICollection<CoinTotal> CoinTotalHistory { get; set; }
                         
         public decimal? TotalCost { get; set; }
         public decimal? TotalValue { get; set; }

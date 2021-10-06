@@ -3,6 +3,7 @@ import { Button, Form, FormGroup, Label, Input, Card, CardTitle, InputGroup, Inp
 import AppTableWithFooter from '../../common/AppTableWithFooter';
 import NumberFormat from 'react-number-format';
 import Select from 'react-select';
+import CoinTotalChart from './CoinTotalChart';
 import axios from 'axios';
 
 export class Crypto extends Component {
@@ -16,7 +17,7 @@ export class Crypto extends Component {
                 coinTemplates: [],
                 totalCost: 0,
                 totalValue: 0
-            },            
+            },
             newCoinCost: '',
             newCoinAmount: '',
             selectedCoinTemplate: null
@@ -33,7 +34,7 @@ export class Crypto extends Component {
         e.preventDefault();
         var coinTemplateId = this.state.selectedCoinTemplate.value;
         var coinTemplate = this.state.coinViewModel.coinTemplates.find(ct => ct.coinTemplateId === coinTemplateId);
-        const coin = {            
+        const coin = {
             cost: this.state.newCoinCost,
             amount: this.state.newCoinAmount,
             userName: this.props.userName,
@@ -42,7 +43,7 @@ export class Crypto extends Component {
         }
 
         axios.post('api/Coin', coin).then(response => {
-            this.setState({                
+            this.setState({
                 newCoinCost: '',
                 newCoinAmount: '',
                 selectedCoinTemplate: null
@@ -54,6 +55,7 @@ export class Crypto extends Component {
     getCoins = async (e) => {
         axios.get('api/Coin?userName=' + this.props.userName).then(response => {
             this.setState({ fetchingData: false, coinViewModel: response.data });
+            //axios.get('api/coin/coinHistory');
         });
     }
 
@@ -155,12 +157,13 @@ export class Crypto extends Component {
                 <h3>Crypto</h3>
                 <hr />
                 <h5>TODO</h5>
-                <ul>                    
-                    <li>Simplify Crypto.js (decompose and cleanup)</li>
-                    <li>Graphs react-charts</li>
-                    <li>Totals history</li>                    
-                    <li>History update trigger</li>                    
+                <ul>
+                    <li>Simplify Crypto.js (decompose and cleanup)</li>                    
+                    <li>History update trigger</li>
+                    <li>Totals range and page</li>
                 </ul>
+                <hr />
+                {this.state.fetchingData ? <div className="center"><Spinner /></div> : <CoinTotalChart chartData={this.state.coinViewModel.coinTotalHistory} />}
                 <hr />
                 {this.state.fetchingData ? <div className="center"><Spinner /></div> : <AppTableWithFooter columns={columns} data={this.state.coinViewModel.coins} />}
                 <hr />
@@ -169,7 +172,7 @@ export class Crypto extends Component {
                     {this.state.fetchingData ? <div className="center"><Spinner /></div> :
                         <Form onSubmit={this.newCoin}>
                             <FormGroup>
-                                <Label for="name">Name</Label>                                
+                                <Label for="name">Name</Label>
                                 <Select options={coinNames} onChange={this.handleSelectedNameChange} value={this.state.selectedCoinTemplate} />
                                 <Label for="day">Cost</Label>
                                 <Input type="text" name="cost" id="cost" onChange={this.handleNewCoinCostChange} placeholder="Cost" value={this.state.newCoinCost} />

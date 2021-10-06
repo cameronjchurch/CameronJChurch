@@ -42,6 +42,7 @@ namespace CameronJChurch.Controllers
             try
             {
                 var coins = await _context.Coins.Include(c => c.CoinTemplate).Include(c => c.History).Where(c => c.UserName == userName).ToListAsync();
+                var coinTotals = await _context.CoinTotalHistory.Where(ct => ct.UserName == userName).ToListAsync();
                 var coinTemplates = await _context.CoinTemplates.ToListAsync();
                 var availableCoins = coinTemplates.Where(ct => !coins.Any(c => c.CoinTemplate.Name == ct.Name));
 
@@ -51,6 +52,8 @@ namespace CameronJChurch.Controllers
                     prices = await GetCoinGeckoPrices(coins);                
 
                 results = GetConViewModel(prices, coins, availableCoins);
+
+                results.CoinTotalHistory = coinTotals;
             }
             catch (Exception exception)
             {
@@ -103,6 +106,61 @@ namespace CameronJChurch.Controllers
             }
 
             return Ok();
+        }
+
+        [Route("coinHistory")]
+        [HttpGet]
+        public async Task<IEnumerable<CoinTotal>> CoinHistory(bool useCoinbase = false) 
+        {
+            Dictionary<string, decimal?> prices = new();
+            var users = await _context.Users.ToListAsync();
+            var currentDate = DateTime.UtcNow;
+            List<CoinTotal> totals = new();
+
+            foreach (var user in users)
+            {
+                var coins = await _context.Coins.Include(c => c.CoinTemplate).Where(c => c.UserName == user.UserName).ToListAsync();
+                if (useCoinbase)
+                    prices = await GetCoinbasePrices(coins);
+                else
+                    prices = await GetCoinGeckoPrices(coins);
+                
+                foreach (var coin in coins)
+                {
+                    var price = prices[coin.CoinTemplate.Symbol];
+
+                    coin.Price = price;
+
+                    coin.Value = coin.Amount * coin.Price;
+
+                    // TODO do we want to have history done here individually?
+                    //var newCoinHistory = new CoinHistory
+                    //{
+                    //    CoinId = coin.CoinId,
+                    //    Amount = coin.Amount,
+                    //    Cost = coin.Cost,
+                    //    CreatedDate = currentDate
+                    //};                    
+                }                
+
+                var totalCost = coins.Sum(c => c.Cost);
+                var totalValue = coins.Sum(c => c.Value);
+
+                var newTotal = new CoinTotal
+                {
+                    UserName = user.UserName,
+                    TotalCost = totalCost,
+                    TotalValue = totalValue,
+                    CreatedDate = currentDate
+                };
+
+                totals.Add(newTotal);
+                await _context.CoinTotalHistory.AddAsync(newTotal);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return totals;
         }
 
         private static CoinViewModel GetConViewModel(IDictionary<string, decimal?> prices, IEnumerable<Coin> coins, IEnumerable<CoinTemplate> coinTemplates)

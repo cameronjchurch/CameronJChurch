@@ -17,7 +17,8 @@ export class Home extends Component {
                     <li>Demo</li>
                     <li>Arch diagrams</li>
                     <li>n-tier</li>
-                    <li>Fix resume download</li>                    
+                    <li>Fix resume download</li>
+                    <li>Golf round</li>                    
                 </ul>
                 <hr />
                 <div id="contact">

@@ -146,7 +146,7 @@ namespace CameronJChurch.Data.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("CoinTemplateId")
+                    b.Property<int>("CoinTemplateId")
                         .HasColumnType("INTEGER");
 
                     b.Property<decimal>("Cost")
@@ -208,6 +208,29 @@ namespace CameronJChurch.Data.Migrations
                     b.HasKey("CoinTemplateId");
 
                     b.ToTable("CoinTemplates");
+                });
+
+            modelBuilder.Entity("CameronJChurch.Models.CoinTotal", b =>
+                {
+                    b.Property<int>("CoinTotalId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("TotalCost")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("TotalValue")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("CoinTotalId");
+
+                    b.ToTable("CoinTotalHistory");
                 });
 
             modelBuilder.Entity("CameronJChurch.Models.Log", b =>
@@ -484,7 +507,9 @@ namespace CameronJChurch.Data.Migrations
                 {
                     b.HasOne("CameronJChurch.Models.CoinTemplate", "CoinTemplate")
                         .WithMany()
-                        .HasForeignKey("CoinTemplateId");
+                        .HasForeignKey("CoinTemplateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("CoinTemplate");
                 });
