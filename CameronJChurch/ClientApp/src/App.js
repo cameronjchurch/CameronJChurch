@@ -8,7 +8,7 @@ import { ApplicationPaths } from './components/api-authorization/ApiAuthorizatio
 import AdminHome from './components/admin/AdminHome';
 import FinancesHome from './components/finances/FinancesHome';
 import GolfHome from './components/golf/GolfHome';
-import ExerciseHome from './components/exercise/ExerciseHome';
+import { ExerciseHome } from './components/exercise/ExerciseHome';
 import authService from './components/api-authorization/AuthorizeService'
 
 import './custom.css'

@@ -233,6 +233,54 @@ namespace CameronJChurch.Data.Migrations
                     b.ToTable("CoinTotalHistory");
                 });
 
+            modelBuilder.Entity("CameronJChurch.Models.ExerciseActivity", b =>
+                {
+                    b.Property<int>("ExerciseActivityId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Count")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ExerciseActivityName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ExerciseActivityUnit")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ExerciseActivityId");
+
+                    b.ToTable("ExerciseActivity");
+                });
+
+            modelBuilder.Entity("CameronJChurch.Models.ExerciseActivityDay", b =>
+                {
+                    b.Property<int>("ExerciseActivityDayId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("ExerciseActivityId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ExerciseActivityDayId");
+
+                    b.HasIndex("ExerciseActivityId");
+
+                    b.ToTable("ExerciseActivityDay");
+                });
+
             modelBuilder.Entity("CameronJChurch.Models.Log", b =>
                 {
                     b.Property<long>("Id")
@@ -521,6 +569,15 @@ namespace CameronJChurch.Data.Migrations
                         .HasForeignKey("CoinId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("CameronJChurch.Models.ExerciseActivityDay", b =>
+                {
+                    b.HasOne("CameronJChurch.Models.ExerciseActivity", "ExerciseActivity")
+                        .WithMany()
+                        .HasForeignKey("ExerciseActivityId");
+
+                    b.Navigation("ExerciseActivity");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
