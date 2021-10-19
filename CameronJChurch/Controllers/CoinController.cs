@@ -131,31 +131,36 @@ namespace CameronJChurch.Controllers
 
                     coin.Price = price;
 
-                    coin.Value = coin.Amount * coin.Price;
-
-                    // TODO do we want to have history done here individually?
-                    //var newCoinHistory = new CoinHistory
-                    //{
-                    //    CoinId = coin.CoinId,
-                    //    Amount = coin.Amount,
-                    //    Cost = coin.Cost,
-                    //    CreatedDate = currentDate
-                    //};                    
+                    coin.Value = coin.Amount * coin.Price;                 
                 }                
 
                 var totalCost = coins.Sum(c => c.Cost);
                 var totalValue = coins.Sum(c => c.Value);
 
-                var newTotal = new CoinTotal
-                {
-                    UserName = user.UserName,
-                    TotalCost = totalCost,
-                    TotalValue = totalValue,
-                    CreatedDate = currentDate
-                };
+                var total = await _context.CoinTotalHistory.FirstOrDefaultAsync(t => t.UserName == user.UserName && t.CreatedDate.Date == currentDate.Date);
 
-                totals.Add(newTotal);
-                await _context.CoinTotalHistory.AddAsync(newTotal);
+                if (total == null)
+                {
+                    total = new CoinTotal
+                    {
+                        UserName = user.UserName,
+                        TotalCost = totalCost,
+                        TotalValue = totalValue,
+                        CreatedDate = currentDate
+                    };
+
+                    await _context.CoinTotalHistory.AddAsync(total);
+                }
+                else 
+                {
+                    total.TotalCost = totalCost;
+                    total.TotalValue = totalValue;
+                    total.CreatedDate = currentDate;
+
+                    _context.CoinTotalHistory.Update(total);
+                }
+
+                totals.Add(total);                
             }
 
             await _context.SaveChangesAsync();

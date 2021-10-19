@@ -7,6 +7,8 @@ import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizat
 import { ApplicationPaths } from './components/api-authorization/ApiAuthorizationConstants';
 import AdminHome from './components/admin/AdminHome';
 import FinancesHome from './components/finances/FinancesHome';
+import GolfHome from './components/golf/GolfHome';
+import ExerciseHome from './components/exercise/ExerciseHome';
 import authService from './components/api-authorization/AuthorizeService'
 
 import './custom.css'
@@ -52,6 +54,8 @@ export default class App extends Component {
             <Layout authenticated={authenticated} userName={userName} >
                 <Route exact path='/' component={Home} />
                 <AuthorizeRoute path='/finances' component={FinancesHome} ready={ready} authenticated={authenticated} userName={userName} />
+                <AuthorizeRoute path='/golf' component={GolfHome} ready={ready} authenticated={authenticated} userName={userName} />
+                <AuthorizeRoute path='/exercise' component={ExerciseHome} ready={ready} authenticated={authenticated} userName={userName} />
                 <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
                 <AuthorizeRoute path='/Admin' component={AdminHome} ready={ready} authenticated={authenticated} userName={userName} />
             </Layout>
