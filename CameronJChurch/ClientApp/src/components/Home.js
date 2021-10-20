@@ -19,7 +19,7 @@ export class Home extends Component {
                     <li>n-tier</li>
                     <li>Fix resume download</li>
                     <li>Golf round (OCR Optical Character Recognition) https://github.com/naptha/tesseract.js</li>
-                    <li>Exercise</li>
+                    <li>Copywirght</li>
                 </ul>
                 <hr />
                 <div id="contact">

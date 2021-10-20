@@ -6,11 +6,13 @@ namespace CameronJChurch.Models.ViewModels
     {
         public ExerciseViewModel()
         {
-            Activities = new List<ExerciseActivityDay>();
+            AllActivities = new List<ExerciseActivityDay>();
+            TodaysActivities = new List<ExerciseActivityDay>();
             Exercises = new List<ExerciseActivity>();
         }
 
-        public ICollection<ExerciseActivityDay> Activities { get; set; }
+        public ICollection<ExerciseActivityDay> AllActivities { get; set; }
+        public ICollection<ExerciseActivityDay> TodaysActivities { get; set; }
         public ICollection<ExerciseActivity> Exercises { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 import { Row, Col, Button, Label, Form, FormGroup, Card, CardTitle, Spinner, Input } from 'reactstrap';
 import Select from 'react-select';
 import AppTable from '../common/AppTable';
+import ExerciseChart from './ExerciseChart';
 import moment from 'moment';
 import axios from 'axios';
 
@@ -11,13 +12,14 @@ export class ExerciseHome extends Component {
 
         this.state = {
             fetchingData: true,
-            today: moment().toString(),
+            today: moment(),
             newExerciseName: '',
             newExerciseUnit: '',
             newExerciseAmount: 0,
             selectedExercise: null,
             exerciseViewModel: {
-                activities: [],
+                allActivities: [],
+                todaysActivities: [],
                 exercises: []
             }
         }
@@ -46,11 +48,6 @@ export class ExerciseHome extends Component {
         });
     }
 
-    saveExercises = async (e) => {
-        e.preventDefault();
-
-    }
-
     handleNewExerciseNameChange = ({ target: { value } }) => {
         this.setState({ newExerciseName: value });
     }
@@ -66,7 +63,7 @@ export class ExerciseHome extends Component {
 
     addExercise = () => {
         if (this.state.selectedExercise) {
-            const selectedExercise = this.state.exerciseViewModel.exercises.find(e => e.exerciseActivityId == this.state.selectedExercise.value);
+            const selectedExercise = this.state.exerciseViewModel.exercises.find(e => e.exerciseActivityId === this.state.selectedExercise.value);
             var viewModel = this.state.exerciseViewModel;
 
             const index = viewModel.exercises.indexOf(selectedExercise);
@@ -75,12 +72,23 @@ export class ExerciseHome extends Component {
             const newActivity = {
                 exerciseActivity: selectedExercise,
                 count: 0,
-                userName: this.props.userName
+                userName: this.props.userName,
+                date: this.state.today
             }
-            viewModel.activities.push(newActivity);
+            viewModel.todaysActivities.push(newActivity);
 
             this.setState({ selectedExercise: null, exerciseViewModel: viewModel });
         }
+    }
+
+    addRep = async (exerciseActivityId) => {
+        var viewModel = this.state.exerciseViewModel;
+        var currentActivity = viewModel.todaysActivities.find(a => a.exerciseActivity.exerciseActivityId === exerciseActivityId);
+        currentActivity.count++;
+
+        await axios.post('api/Exercise/activity', currentActivity).then(response => {
+            this.getExercises();
+        });
     }
 
     renderNameCell = (props) => {
@@ -90,16 +98,24 @@ export class ExerciseHome extends Component {
         );
     }
     renderAmountCell = (props) => {
-        return (<span></span>);
+        const data = props.cell.row.original;
+        const amount = data.exerciseActivity.count;
+        return (<span>{amount}</span>);
     }
     renderCountCell = (props) => {
-        return (<span></span>);
+        const data = props.cell.row.original;
+        const count = data.count;
+        return (<span>{count}</span>);
     }
     renderTotalCell = (props) => {
-        return (<span></span>);
+        const data = props.cell.row.original;
+        const total = data.count * data.exerciseActivity.count;
+        const unit = data.exerciseActivity.exerciseActivityUnit;
+        return (<span>{total + ' (' + unit + ')'}</span>);
     }
     renderAddCell = (props) => {
-        return (<span></span>);
+        const data = props.cell.row.original;
+        return (<Button onClick={() => this.addRep(data.exerciseActivity.exerciseActivityId)} className="btn btn-success btn-rounded btn-sm">Add</Button>);
     }
 
     render() {
@@ -112,11 +128,18 @@ export class ExerciseHome extends Component {
                 { Header: 'Total', Cell: this.renderTotalCell },
                 { Header: 'Add', Cell: this.renderAddCell }
             ];
+        const showChart = this.state.exerciseViewModel.allActivities.length > 0;
+
         return (
             <div>
                 <h3>Exercise</h3>
-                <h5>{this.state.today}</h5>
+                <h5>{this.state.today.format("LLLL")}</h5>
+                <hr />
+                {showChart && <div>
+                    < ExerciseChart chartData={this.state.exerciseViewModel.allActivities} />
+                    <hr /></div>}
                 <Row>
+                    <Col><Label style={{ float: "right" }}> Available Exercises</Label></Col>
                     <Col>
                         <Select options={availableExercises} onChange={this.handleSelectedExerciseChange} value={this.state.selectedExercise} />
                     </Col>
@@ -125,7 +148,7 @@ export class ExerciseHome extends Component {
                     </Col>
                 </Row>
                 <hr />
-                <AppTable columns={columns} data={this.state.exerciseViewModel.activities} />
+                <AppTable columns={columns} data={this.state.exerciseViewModel.todaysActivities} />
                 <hr />
                 <Card outline color="secondary" style={{ margin: "17px", padding: "17px" }}>
                     <CardTitle tag="h5">New Exercise</CardTitle>

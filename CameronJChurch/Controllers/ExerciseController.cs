@@ -32,10 +32,14 @@ namespace CameronJChurch.Controllers
             try
             {
                 var exercises = await _context.ExerciseActivity.Where(e => e.UserName == userName).ToListAsync();
-                var exerciseActivities = await _context.ExerciseActivityDay.Include(a => a.ExerciseActivity).Where(a => a.UserName == userName).ToListAsync();
+                var allActivities = await _context.ExerciseActivityDay.Include(a => a.ExerciseActivity).Where(a => a.UserName == userName).ToListAsync();
 
-                results.Exercises = exercises;
-                results.Activities = exerciseActivities;
+                var todaysActivities = allActivities.Where(a => a.Date >= DateTime.Now.Date).ToList();
+                List<ExerciseActivity> availableExercises = exercises.Where(e => !todaysActivities.Any(ea => ea.ExerciseActivity.ExerciseActivityId == e.ExerciseActivityId)).ToList();
+
+                results.Exercises = availableExercises;
+                results.AllActivities = allActivities;
+                results.TodaysActivities = todaysActivities;
             }
             catch (Exception exception)
             {
@@ -71,28 +75,27 @@ namespace CameronJChurch.Controllers
             return Ok();
         }
 
-        [HttpPatch]
-        public async Task<IActionResult> Patch(IEnumerable<ExerciseActivityDay> activities)
+        [Route("activity")]
+        [HttpPost]
+        public async Task<IActionResult> PostActivity(ExerciseActivityDay exerciseActivityDay)
         {
             try
             {
-                foreach (var activity in activities)
+                if (exerciseActivityDay.ExerciseActivityDayId == 0)
                 {
-                    if (activity.ExerciseActivityDayId == 0)
-                    {
-                        await _context.ExerciseActivityDay.AddAsync(activity);
-                    }
-                    else
-                    {
-                        _context.ExerciseActivityDay.Update(activity);
-                    }
+                    await _context.ExerciseActivityDay.AddAsync(exerciseActivityDay);
+                    _context.ExerciseActivity.Attach(exerciseActivityDay.ExerciseActivity);
+                }
+                else
+                {
+                    _context.ExerciseActivityDay.Update(exerciseActivityDay);
                 }
 
                 await _context.SaveChangesAsync();
             }
             catch (Exception exception)
             {
-                _logger.LogError(exception, $"Error saving ExerciseActivityDays");
+                _logger.LogError(exception, $"Error saving ExerciseActivityDay");
                 throw;
             }
 
