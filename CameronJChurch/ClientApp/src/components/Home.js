@@ -9,6 +9,8 @@ export class Home extends Component {
                 <h5>TODO</h5>
                 <ul>
                     <li>API Route Constants</li>
+                    <li>Convert to typescript</li>
+                    <li>Proformance monitoring module (api calls)</li>
                     <li>Update homepage</li>
                     <li>Fix mobile formatting</li>
                     <li>Azure monitoring</li>

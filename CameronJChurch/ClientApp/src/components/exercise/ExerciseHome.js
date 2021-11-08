@@ -82,12 +82,13 @@ export class ExerciseHome extends Component {
     }
 
     addRep = async (exerciseActivityId) => {
+        this.setState({ fetchingData: true });
         var viewModel = this.state.exerciseViewModel;
         var currentActivity = viewModel.todaysActivities.find(a => a.exerciseActivity.exerciseActivityId === exerciseActivityId);
         currentActivity.count++;
 
         await axios.post('api/Exercise/activity', currentActivity).then(response => {
-            this.getExercises();
+            this.getExercises();            
         });
     }
 
@@ -115,7 +116,7 @@ export class ExerciseHome extends Component {
     }
     renderAddCell = (props) => {
         const data = props.cell.row.original;
-        return (<Button onClick={() => this.addRep(data.exerciseActivity.exerciseActivityId)} className="btn btn-success btn-rounded btn-sm">Add</Button>);
+        return (<div>{this.state.fetchingData ? <Spinner /> : < Button onClick={() => this.addRep(data.exerciseActivity.exerciseActivityId)} className="btn btn-success btn-rounded btn-sm">Add</Button>}</div >);
     }
 
     render() {
