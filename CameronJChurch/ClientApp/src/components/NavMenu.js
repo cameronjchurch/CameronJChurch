@@ -36,16 +36,20 @@ export class NavMenu extends Component {
                                 </NavItem>
                                 {authenticated &&
                                     < NavItem >
-                                        <NavLink tag={Link} className="text-dark" to="/finances">Finances</NavLink>
+                                        <NavLink tag={Link} className="text-dark" to="/bills">Bills</NavLink>
                                     </NavItem>}
                                 {authenticated &&
                                     < NavItem >
-                                        <NavLink tag={Link} className="text-dark" to="/golf">Golf</NavLink>
+                                        <NavLink tag={Link} className="text-dark" to="/crypto">Crypto</NavLink>
                                     </NavItem>}
                                 {authenticated &&
                                     < NavItem >
                                         <NavLink tag={Link} className="text-dark" to="/exercise">Exercise</NavLink>
                                     </NavItem>}
+                                {authenticated &&
+                                    < NavItem >
+                                        <NavLink tag={Link} className="text-dark" to="/golf">Golf</NavLink>
+                                    </NavItem>}                                
                                 {authenticated &&
                                     <NavItem>
                                         <NavLink tag={Link} className="text-dark" to='/Admin'>Admin</NavLink>

@@ -1,16 +1,16 @@
 {
   "dependencies": {
-    "mssql1": {
-      "type": "mssql",
-      "connectionId": "ConnectionStrings:IdentityContextConnection",
-      "suggestion": "true",
-      "ignored": "true"
-    },
     "mssql2": {
-      "type": "mssql",
-      "connectionId": "ConnectionStrings:ApplicationContextConnection",
+      "ignored": "true",
       "suggestion": "true",
-      "ignored": "true"
+      "type": "mssql",
+      "connectionId": "ConnectionStrings:ApplicationContextConnection"
+    },
+    "mssql1": {
+      "ignored": "true",
+      "suggestion": "true",
+      "type": "mssql",
+      "connectionId": "ConnectionStrings:ApplicationContextConnection"
     }
   }
 }

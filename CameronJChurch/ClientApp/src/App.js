@@ -6,7 +6,8 @@ import AuthorizeRoute from './components/api-authorization/AuthorizeRoute';
 import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
 import { ApplicationPaths } from './components/api-authorization/ApiAuthorizationConstants';
 import AdminHome from './components/admin/AdminHome';
-import FinancesHome from './components/finances/FinancesHome';
+import { Bills } from './components/bills/Bills';
+import { Crypto } from './components/crypto/Crypto';
 import GolfHome from './components/golf/GolfHome';
 import { ExerciseHome } from './components/exercise/ExerciseHome';
 import authService from './components/api-authorization/AuthorizeService'
@@ -53,9 +54,10 @@ export default class App extends Component {
         return (
             <Layout authenticated={authenticated} userName={userName} >
                 <Route exact path='/' component={Home} />
-                <AuthorizeRoute path='/finances' component={FinancesHome} ready={ready} authenticated={authenticated} userName={userName} />
-                <AuthorizeRoute path='/golf' component={GolfHome} ready={ready} authenticated={authenticated} userName={userName} />
+                <AuthorizeRoute path='/bills' component={Bills} ready={ready} authenticated={authenticated} userName={userName} />
+                <AuthorizeRoute path='/crypto' component={Crypto} ready={ready} authenticated={authenticated} userName={userName} />
                 <AuthorizeRoute path='/exercise' component={ExerciseHome} ready={ready} authenticated={authenticated} userName={userName} />
+                <AuthorizeRoute path='/golf' component={GolfHome} ready={ready} authenticated={authenticated} userName={userName} />                
                 <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
                 <AuthorizeRoute path='/Admin' component={AdminHome} ready={ready} authenticated={authenticated} userName={userName} />
             </Layout>
