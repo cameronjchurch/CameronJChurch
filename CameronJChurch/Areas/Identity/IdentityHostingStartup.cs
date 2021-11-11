@@ -1,4 +1,4 @@
-﻿using CameronJChurch.Areas.Identity.Data;
+﻿using CameronJChurch.Models;
 using CameronJChurch.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -13,12 +13,12 @@ namespace CameronJChurch.Areas.Identity
         public void Configure(IWebHostBuilder builder)
         {
             builder.ConfigureServices((context, services) => {
-                services.AddDbContext<IdentityContext>(options =>
+                services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlite(
-                        context.Configuration.GetConnectionString("IdentityContextConnection")));
+                        context.Configuration.GetConnectionString("ApplicationContextConnection")));
 
                 services.AddDefaultIdentity<CameronJChurchUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                    .AddEntityFrameworkStores<IdentityContext>();
+                    .AddEntityFrameworkStores<ApplicationDbContext>();
             });
         }
     }

@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace CameronJChurch.Areas.Identity.Data.Migrations
+namespace CameronJChurch.Data.Migrations
 {
-    public partial class IdentityCreate : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -47,6 +47,40 @@ namespace CameronJChurch.Areas.Identity.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "BillTemplates",
+                columns: table => new
+                {
+                    BillTemplateId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: true),
+                    Day = table.Column<int>(type: "INTEGER", nullable: false),
+                    Amount = table.Column<double>(type: "REAL", nullable: false),
+                    UserName = table.Column<string>(type: "TEXT", nullable: true),
+                    Active = table.Column<bool>(type: "INTEGER", nullable: false, defaultValue: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BillTemplates", x => x.BillTemplateId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Coins",
+                columns: table => new
+                {
+                    CoinId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: true),
+                    Price = table.Column<double>(type: "REAL", nullable: false),
+                    Cost = table.Column<double>(type: "REAL", nullable: false),
+                    Amount = table.Column<double>(type: "REAL", nullable: false),
+                    UserName = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Coins", x => x.CoinId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "DeviceCodes",
                 columns: table => new
                 {
@@ -63,6 +97,23 @@ namespace CameronJChurch.Areas.Identity.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_DeviceCodes", x => x.UserCode);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Logs",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Timestamp = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Level = table.Column<string>(type: "TEXT", nullable: true),
+                    Exception = table.Column<string>(type: "TEXT", nullable: true),
+                    RenderedMessage = table.Column<string>(type: "TEXT", nullable: true),
+                    Properties = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Logs", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -191,6 +242,29 @@ namespace CameronJChurch.Areas.Identity.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Bills",
+                columns: table => new
+                {
+                    BillId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Month = table.Column<int>(type: "INTEGER", nullable: false),
+                    Year = table.Column<int>(type: "INTEGER", nullable: false),
+                    Amount = table.Column<double>(type: "REAL", nullable: false),
+                    Paid = table.Column<bool>(type: "INTEGER", nullable: false),
+                    BillTemplateId = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Bills", x => x.BillId);
+                    table.ForeignKey(
+                        name: "FK_Bills_BillTemplates_BillTemplateId",
+                        column: x => x.BillTemplateId,
+                        principalTable: "BillTemplates",
+                        principalColumn: "BillTemplateId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -227,6 +301,11 @@ namespace CameronJChurch.Areas.Identity.Data.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Bills_BillTemplateId",
+                table: "Bills",
+                column: "BillTemplateId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DeviceCodes_DeviceCode",
@@ -273,7 +352,16 @@ namespace CameronJChurch.Areas.Identity.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Bills");
+
+            migrationBuilder.DropTable(
+                name: "Coins");
+
+            migrationBuilder.DropTable(
                 name: "DeviceCodes");
+
+            migrationBuilder.DropTable(
+                name: "Logs");
 
             migrationBuilder.DropTable(
                 name: "PersistedGrants");
@@ -283,6 +371,9 @@ namespace CameronJChurch.Areas.Identity.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "BillTemplates");
         }
     }
 }

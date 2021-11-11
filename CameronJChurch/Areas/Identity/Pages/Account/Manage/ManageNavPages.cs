@@ -24,6 +24,8 @@ namespace CameronJChurch.Areas.Identity.Pages.Account.Manage
 
         public static string TwoFactorAuthentication => "TwoFactorAuthentication";
 
+        public static string Users => "Users";
+
         public static string IndexNavClass(ViewContext viewContext) => PageNavClass(viewContext, Index);
 
         public static string EmailNavClass(ViewContext viewContext) => PageNavClass(viewContext, Email);
@@ -39,6 +41,8 @@ namespace CameronJChurch.Areas.Identity.Pages.Account.Manage
         public static string PersonalDataNavClass(ViewContext viewContext) => PageNavClass(viewContext, PersonalData);
 
         public static string TwoFactorAuthenticationNavClass(ViewContext viewContext) => PageNavClass(viewContext, TwoFactorAuthentication);
+
+        public static string UsersClass(ViewContext viewContext) => PageNavClass(viewContext, Users);
 
         private static string PageNavClass(ViewContext viewContext, string page)
         {

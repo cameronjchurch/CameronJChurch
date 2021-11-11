@@ -3,20 +3,79 @@ using System;
 using CameronJChurch.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace CameronJChurch.Areas.Identity.Data.Migrations
+namespace CameronJChurch.Data.Migrations
 {
-    [DbContext(typeof(IdentityContext))]
-    partial class IdentityContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(ApplicationDbContext))]
+    [Migration("20211019160140_Exercise")]
+    partial class Exercise
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "5.0.9");
+                .HasAnnotation("ProductVersion", "5.0.10");
 
-            modelBuilder.Entity("CameronJChurch.Areas.Identity.Data.CameronJChurchUser", b =>
+            modelBuilder.Entity("CameronJChurch.Models.Bill", b =>
+                {
+                    b.Property<int>("BillId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("Amount")
+                        .HasColumnType("REAL");
+
+                    b.Property<int?>("BillTemplateId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Month")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Paid")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("BillId");
+
+                    b.HasIndex("BillTemplateId");
+
+                    b.ToTable("Bills");
+                });
+
+            modelBuilder.Entity("CameronJChurch.Models.BillTemplate", b =>
+                {
+                    b.Property<int>("BillTemplateId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("Amount")
+                        .HasColumnType("REAL");
+
+                    b.Property<int>("Day")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("BillTemplateId");
+
+                    b.ToTable("BillTemplates");
+                });
+
+            modelBuilder.Entity("CameronJChurch.Models.CameronJChurchUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
@@ -78,6 +137,176 @@ namespace CameronJChurch.Areas.Identity.Data.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("CameronJChurch.Models.Coin", b =>
+                {
+                    b.Property<int>("CoinId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("CoinTemplateId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Cost")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("CoinId");
+
+                    b.HasIndex("CoinTemplateId");
+
+                    b.ToTable("Coins");
+                });
+
+            modelBuilder.Entity("CameronJChurch.Models.CoinHistory", b =>
+                {
+                    b.Property<int>("CoinHistoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("CoinId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Cost")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("CoinHistoryId");
+
+                    b.HasIndex("CoinId");
+
+                    b.ToTable("CoinHistory");
+                });
+
+            modelBuilder.Entity("CameronJChurch.Models.CoinTemplate", b =>
+                {
+                    b.Property<int>("CoinTemplateId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Symbol")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("CoinTemplateId");
+
+                    b.ToTable("CoinTemplates");
+                });
+
+            modelBuilder.Entity("CameronJChurch.Models.CoinTotal", b =>
+                {
+                    b.Property<int>("CoinTotalId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("TotalCost")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("TotalValue")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("CoinTotalId");
+
+                    b.ToTable("CoinTotalHistory");
+                });
+
+            modelBuilder.Entity("CameronJChurch.Models.ExerciseActivity", b =>
+                {
+                    b.Property<int>("ExerciseActivityId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("Count")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ExerciseActivityName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ExerciseActivityUnit")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ExerciseActivityId");
+
+                    b.ToTable("ExerciseActivity");
+                });
+
+            modelBuilder.Entity("CameronJChurch.Models.ExerciseActivityDay", b =>
+                {
+                    b.Property<int>("ExerciseActivityDayId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("ExerciseActivityId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ExerciseActivityDayId");
+
+                    b.HasIndex("ExerciseActivityId");
+
+                    b.ToTable("ExerciseActivityDay");
+                });
+
+            modelBuilder.Entity("CameronJChurch.Models.Log", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Exception")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Level")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Properties")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RenderedMessage")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Logs");
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.DeviceFlowCodes", b =>
@@ -315,6 +544,44 @@ namespace CameronJChurch.Areas.Identity.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("CameronJChurch.Models.Bill", b =>
+                {
+                    b.HasOne("CameronJChurch.Models.BillTemplate", "BillTemplate")
+                        .WithMany()
+                        .HasForeignKey("BillTemplateId");
+
+                    b.Navigation("BillTemplate");
+                });
+
+            modelBuilder.Entity("CameronJChurch.Models.Coin", b =>
+                {
+                    b.HasOne("CameronJChurch.Models.CoinTemplate", "CoinTemplate")
+                        .WithMany()
+                        .HasForeignKey("CoinTemplateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CoinTemplate");
+                });
+
+            modelBuilder.Entity("CameronJChurch.Models.CoinHistory", b =>
+                {
+                    b.HasOne("CameronJChurch.Models.Coin", null)
+                        .WithMany("History")
+                        .HasForeignKey("CoinId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CameronJChurch.Models.ExerciseActivityDay", b =>
+                {
+                    b.HasOne("CameronJChurch.Models.ExerciseActivity", "ExerciseActivity")
+                        .WithMany()
+                        .HasForeignKey("ExerciseActivityId");
+
+                    b.Navigation("ExerciseActivity");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -326,7 +593,7 @@ namespace CameronJChurch.Areas.Identity.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("CameronJChurch.Areas.Identity.Data.CameronJChurchUser", null)
+                    b.HasOne("CameronJChurch.Models.CameronJChurchUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -335,7 +602,7 @@ namespace CameronJChurch.Areas.Identity.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("CameronJChurch.Areas.Identity.Data.CameronJChurchUser", null)
+                    b.HasOne("CameronJChurch.Models.CameronJChurchUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -350,7 +617,7 @@ namespace CameronJChurch.Areas.Identity.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CameronJChurch.Areas.Identity.Data.CameronJChurchUser", null)
+                    b.HasOne("CameronJChurch.Models.CameronJChurchUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -359,11 +626,16 @@ namespace CameronJChurch.Areas.Identity.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("CameronJChurch.Areas.Identity.Data.CameronJChurchUser", null)
+                    b.HasOne("CameronJChurch.Models.CameronJChurchUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("CameronJChurch.Models.Coin", b =>
+                {
+                    b.Navigation("History");
                 });
 #pragma warning restore 612, 618
         }

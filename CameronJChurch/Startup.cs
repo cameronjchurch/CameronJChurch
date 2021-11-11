@@ -1,12 +1,16 @@
-using CameronJChurch.Areas.Identity.Data;
 using CameronJChurch.Data;
+using CameronJChurch.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Threading.Tasks;
 
 namespace CameronJChurch
 {
@@ -14,7 +18,7 @@ namespace CameronJChurch
     {
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            Configuration = configuration;            
         }
 
         public IConfiguration Configuration { get; }
@@ -24,8 +28,12 @@ namespace CameronJChurch
         {
             services.AddDatabaseDeveloperPageExceptionFilter();
 
+            services.AddDbContext<ApplicationDbContext>(options =>
+                    options.UseSqlite(
+                        Configuration.GetConnectionString("ApplicationContextConnection")));
+
             services.AddIdentityServer()
-                .AddApiAuthorization<CameronJChurchUser, IdentityContext>();
+                .AddApiAuthorization<CameronJChurchUser, ApplicationDbContext>();
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
@@ -59,12 +67,17 @@ namespace CameronJChurch
             app.UseSpaStaticFiles();
 
             app.UseRouting();
-
+            
             app.UseAuthentication();
-            app.UseIdentityServer();
             app.UseAuthorization();
+            app.UseIdentityServer();                     
+
             app.UseEndpoints(endpoints =>
-            {                
+            {
+                // removes the access to the register page. adding users is maintained in the Users page now
+                endpoints.MapGet("/Identity/Account/Register", context => Task.Factory.StartNew(() => context.Response.Redirect("/Identity/Account/Login", true, true)));
+                endpoints.MapPost("/Identity/Account/Register", context => Task.Factory.StartNew(() => context.Response.Redirect("/Identity/Account/Login", true, true)));
+
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");

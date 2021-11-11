@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using CameronJChurch.Areas.Identity.Data;
+using CameronJChurch.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
