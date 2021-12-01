@@ -156,7 +156,7 @@ namespace CameronJChurch.Controllers
                 results.Add(billViewModel);
             }
 
-            return results;
+            return results.OrderBy(b => b.Date);
         }
     }
 }

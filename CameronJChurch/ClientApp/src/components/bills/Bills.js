@@ -1,13 +1,16 @@
 ﻿import React, { Component } from 'react';
-import { Button, Input } from 'reactstrap';
+import { Button, Input, InputGroup, InputGroupAddon } from 'reactstrap';
 import AppTableWithFooter from '../common/AppTableWithFooter';
-const axios = require('axios').default;
+import NumberFormat from 'react-number-format';
+import moment from 'moment';
+import axios from 'axios';
 
 export class Bills extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
+            today: moment(),
             bills: []
         }
 
@@ -40,38 +43,51 @@ export class Bills extends Component {
         this.setState({ bills: this.state.bills });
     }
 
-    renderAmountCell = (cell) => {
+    renderAmountCell = (props) => {
+        const data = props.cell.row.original;
         return (
-            <Input type="text" onChange={(e) => this.handelAmountChange(e, cell.row.values.billId)} value={cell.row.values.amount} className={"w-75"} bsSize="sm" />
+            <InputGroup size="sm">
+                <InputGroupAddon addonType="prepend">$</InputGroupAddon>
+                <Input type="text" onChange={(e) => this.handelAmountChange(e, data.billId)} value={data.amount} className={"w-75"} />
+            </InputGroup>
         );
     }
 
-    renderPaidCell = (cell) => {
+    renderPaidCell = (props) => {
+        const data = props.cell.row.original;
         return (
-            <Input type="checkbox" checked={cell.row.values.paid} onChange={() => this.handlePaidChange(cell.row.values.billId)} disabled={cell.row.values.billId === 0} />
+            <Input type="checkbox" checked={data.paid} onChange={() => this.handlePaidChange(data.billId)} disabled={data.billId === 0} />
         );
     }
 
-    renderAmountFooter = (props) => {
+    renderAmountFooter = () => {
+        var total = 0;
+        this.state.bills.forEach(b => { total += b.amount; });
         return (
-            <span>Total Amount: 0</span>
+            <span>Total Amount: <NumberFormat value={total} displayType="text" thousandSeparator={true} prefix="$" /></span>
             );
+    }
+
+    renderDateCell = (props) => {
+        const data = props.cell.row.original;
+        return (
+            <span>{moment(data.date).format("YYYY-MM-DD")}</span>
+        );
     }
 
     render() {
 
-        const columns = [
-            { Header: 'Id', accessor: 'billId' },
+        const columns = [            
             { Header: 'Name', accessor: 'name' },
-            { Header: 'Amount', accessor: 'amount', Cell: this.renderAmountCell, Footer: this.renderAmountFooter },
-            { Header: 'Date', accessor: 'date' },
-            { Header: 'Paid', accessor: 'paid', Cell: this.renderPaidCell },
-            { Header: 'Creator', accessor: 'userName' }
+            { Header: 'Date', Cell: this.renderDateCell },
+            { Header: 'Paid', Cell: this.renderPaidCell },
+            { Header: 'Amount', Cell: this.renderAmountCell, Footer: this.renderAmountFooter }            
         ];
 
         return (
             <div>
                 <h3>Bills</h3>
+                <h5>{this.state.today.format("LLLL")}</h5>
                 <hr />
                 <h5>TODO</h5>
                 <ul>
@@ -79,8 +95,7 @@ export class Bills extends Component {
                     <li>Fix formatting</li>
                     <ul>
                         <li>Add bill</li>
-                        <li>Admin</li>
-                        <li>Date Formatting</li>
+                        <li>Admin</li>                        
                     </ul>
                     <li>History</li>
                 </ul>

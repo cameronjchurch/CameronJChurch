@@ -88,7 +88,7 @@ export class ExerciseHome extends Component {
         currentActivity.count++;
 
         await axios.post('api/Exercise/activity', currentActivity).then(response => {
-            this.getExercises();            
+            this.getExercises();
         });
     }
 
@@ -116,7 +116,7 @@ export class ExerciseHome extends Component {
     }
     renderAddCell = (props) => {
         const data = props.cell.row.original;
-        return (<div>{this.state.fetchingData ? <Spinner /> : < Button onClick={() => this.addRep(data.exerciseActivity.exerciseActivityId)} className="btn btn-success btn-rounded btn-sm">Add</Button>}</div >);
+        return (<div>{this.state.fetchingData ? <Spinner /> : <Button onClick={() => this.addRep(data.exerciseActivity.exerciseActivityId)} className="btn btn-success btn-rounded btn-sm">Add</Button>}</div >);
     }
 
     render() {

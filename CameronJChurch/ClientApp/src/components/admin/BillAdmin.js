@@ -1,7 +1,8 @@
 ﻿import React, { Component } from 'react';
 import { Button, Form, FormGroup, Label, Input, Card, CardTitle } from 'reactstrap';
 import AppTable from '../common/AppTable';
-const axios = require('axios').default;
+import NumberFormat from 'react-number-format';
+import axios from 'axios';
 
 export class BillAdmin extends Component {
     constructor(props) {
@@ -43,10 +44,15 @@ export class BillAdmin extends Component {
     }
 
     handleNameChange = ({ target: { value } }) => { this.setState({ name: value }); }
-
     handelDayChange = ({ target: { value } }) => { this.setState({ day: value }); }
-
     handleAmountChange = ({ target: { value } }) => { this.setState({ amount: value }); }
+
+    renderAmountCell = (props) => {
+        const data = props.cell.row.original;
+        return (
+            <NumberFormat value={data.amount} displayType="text" thousandSeparator={true} prefix="$" />
+        );
+    }
 
     render() {
         const columns =
@@ -54,7 +60,7 @@ export class BillAdmin extends Component {
                 { Header: 'Id', accessor: 'billTemplateId' },
                 { Header: 'Name', accessor: 'name' },
                 { Header: 'Day', accessor: 'day' },
-                { Header: 'Amount', accessor: 'amount' },
+                { Header: 'Amount', accessor: 'amount', Cell: this.renderAmountCell },
                 { Header: 'Creator', accessor: 'userName' },
                 { Header: 'Delete', accessor: 'delete', Cell: ({ cell }) => (<Button onClick={this.deleteTemplate} id={cell.row.values.billTemplateId} className="btn btn-danger btn-rounded btn-sm">Delete</Button>) }
             ];

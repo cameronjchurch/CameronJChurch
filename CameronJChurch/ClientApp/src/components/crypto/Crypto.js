@@ -129,13 +129,13 @@ export class Crypto extends Component {
         );
     }
 
-    renderCostFooter = (props) => {
+    renderCostFooter = () => {
         return (
             <span>Total Cost: <NumberFormat value={this.state.coinViewModel.totalCost} displayType="text" thousandSeparator={true} prefix="$" /></span>
         );
     }
 
-    renderValueFooter = (props) => {
+    renderValueFooter = () => {
         return (
             <span>Total Value: <NumberFormat value={this.state.coinViewModel.totalValue} displayType="text" thousandSeparator={true} prefix="$" /></span>
         );

@@ -6,7 +6,7 @@ import { BillAdmin } from './BillAdmin';
 import { CryptoAdmin } from './CryptoAdmin';
 
 const AdminHome = (props) => {
-
+    const userName = props.userName;
     const [activeTab, setActiveTab] = useState('1');
 
     const toggle = tab => {
@@ -39,7 +39,7 @@ const AdminHome = (props) => {
                     <Logs />
                 </TabPane>
                 <TabPane tabId="2">
-                    <BillAdmin />
+                    <BillAdmin userName={userName} />
                 </TabPane>
                 <TabPane tabId="3">
                     <CryptoAdmin />
