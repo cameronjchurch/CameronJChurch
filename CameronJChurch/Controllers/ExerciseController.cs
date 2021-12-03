@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -28,15 +29,28 @@ namespace CameronJChurch.Controllers
         public async Task<ExerciseViewModel> Get(string userName)
         {
             ExerciseViewModel results = new();
-            
+            List<PerformanceMetric> performance = new();
+            Stopwatch sw = new();
+
             try
             {
+                sw.Start();
                 var exercises = await _context.ExerciseActivity.Where(e => e.UserName == userName).ToListAsync();
-                var allActivities = await _context.ExerciseActivityDay.Include(a => a.ExerciseActivity).Where(a => a.UserName == userName).ToListAsync();
+                sw.Stop();
+                performance.Add(new PerformanceMetric { Name = "ExerciseActivity", Value = sw.ElapsedMilliseconds });
 
+                sw.Start();
+                var allActivities = await _context.ExerciseActivityDay.Include(a => a.ExerciseActivity).Where(a => a.UserName == userName).ToListAsync();
+                sw.Stop();
+                performance.Add(new PerformanceMetric { Name = "ExerciseActivityDay", Value = sw.ElapsedMilliseconds });
+
+                sw.Start();
                 var todaysActivities = allActivities.Where(a => a.Date >= DateTime.Now.Date).ToList();
                 List<ExerciseActivity> availableExercises = exercises.Where(e => !todaysActivities.Any(ea => ea.ExerciseActivity.ExerciseActivityId == e.ExerciseActivityId)).ToList();
+                sw.Stop();
+                performance.Add(new PerformanceMetric { Name = "Activity calculation", Value = sw.ElapsedMilliseconds });
 
+                results.PerformanceMetrics = performance;
                 results.Exercises = availableExercises;
                 results.AllActivities = allActivities;
                 results.TodaysActivities = todaysActivities;

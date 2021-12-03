@@ -13,8 +13,7 @@ export class Home extends Component {
                     <li>Proformance monitoring module (api calls)</li>
                     <li>Update homepage</li>
                     <li>Fix mobile formatting</li>
-                    <li>Azure monitoring</li>
-                    <li>Finances DD menu</li>
+                    <li>Azure monitoring</li>                    
                     <li>Roles</li>
                     <li>Demo</li>
                     <li>Arch diagrams</li>

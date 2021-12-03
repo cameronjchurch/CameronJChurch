@@ -5,6 +5,7 @@ import AppTable from '../common/AppTable';
 import ExerciseChart from './ExerciseChart';
 import moment from 'moment';
 import axios from 'axios';
+import PerformanceMonitor from '../common/PerformanceMonitor';
 
 export class ExerciseHome extends Component {
     constructor(props) {
@@ -21,15 +22,22 @@ export class ExerciseHome extends Component {
                 allActivities: [],
                 todaysActivities: [],
                 exercises: []
-            }
+            },
+            performanceMetrics: []
         }
     }
 
     componentDidMount() { this.getExercises(); }
 
     getExercises = async (e) => {
+        const t0 = performance.now();
         await axios.get('api/Exercise?userName=' + this.props.userName).then(response => {
-            this.setState({ fetchingData: false, exerciseViewModel: response.data });
+            const t1 = performance.now();
+            this.setState({
+                fetchingData: false,
+                exerciseViewModel: response.data,
+                performanceMetrics: [...response.data.performanceMetrics, { name: 'API - GetExercises', value: (t1 - t0) }]
+            });
         });
     }
 
@@ -168,6 +176,7 @@ export class ExerciseHome extends Component {
                             </FormGroup>
                         </Form>}
                 </Card>
+                <PerformanceMonitor performanceMetrics={this.state.performanceMetrics} />
             </div>
         );
     }

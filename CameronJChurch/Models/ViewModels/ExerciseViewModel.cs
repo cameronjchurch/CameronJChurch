@@ -2,7 +2,7 @@
 
 namespace CameronJChurch.Models.ViewModels
 {
-    public class ExerciseViewModel
+    public class ExerciseViewModel : PerformanceMonitoring
     {
         public ExerciseViewModel()
         {
